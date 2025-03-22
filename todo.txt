@@ -1,0 +1,1 @@
+//TODO: Implementar la funcionalidad de la foto en la entrada, si no hay foto, se mostrará un boton para añadir una foto.
