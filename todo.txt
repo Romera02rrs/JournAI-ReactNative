@@ -1,5 +1,0 @@
-añadir estrellas de puntuación al lado de la fecha
-
-recortar imagen cover la parte de abajo
-
-(NOBRIDGE) WARN  [expo-image-picker] `ImagePicker.MediaTypeOptions` have been deprecated. Use `ImagePicker.MediaType` or an array of `ImagePicker.MediaType` instead.

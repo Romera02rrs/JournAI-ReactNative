@@ -26,7 +26,8 @@ import {
   clearEntriesDirtyFlag,
 } from "@/utils/functions/storage";
 import { Entry, ScrollEvent } from "@/utils/types";
-
+import { getTodayId } from "@/utils/functions/getTodayId";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function DiaryEntriesScreen() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -152,6 +153,28 @@ export default function DiaryEntriesScreen() {
         </View>
       ) : (
         <ScrollView contentContainerStyle={[styles.listContent, { backgroundColor }]}>
+          
+          <TouchableOpacity
+              onPress={() => {
+                saveScrollPosition(position);
+                 router.push(`/journal-editor/${getTodayId()}`);
+              }}
+            >
+              <LinearGradient
+                //colors={['#FFEA70', '#FFA000']}
+                colors={['#f5d166', '#e5ab4f']} // Colores más mate y menos vibrantes
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={[styles.entryContainer, styles.todayEntry]}
+              >
+                <Text style={[styles.entryDate, { color: '#3E2C00' }]}>TODAY</Text>
+                <Text style={[styles.entryTitle, { color: '#3E2C00', fontWeight: '600' }]}>TODAY</Text>
+                <Text style={[styles.entryContent, { color: '#3E2C00' }]} numberOfLines={2}>
+                  TODAY
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
           {entries.map((item: Entry) => (
             <TouchableOpacity
               key={item.id}
@@ -235,5 +258,11 @@ const styles = StyleSheet.create({
   },
   entryContent: {
     fontSize: 14,
+  },
+  todayEntry: {
+    backgroundColor: "#FFD700", // Gold
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
   },
 });

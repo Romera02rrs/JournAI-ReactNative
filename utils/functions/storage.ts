@@ -200,7 +200,7 @@ export const removeAllEntries = async () => {
 export const selectAndSaveImage = async (): Promise<string | null> => {
   try {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images, // <- así es como debe ser ahora
+      mediaTypes: ["images"],
       allowsEditing: true,
       quality: 0.8,
     });
