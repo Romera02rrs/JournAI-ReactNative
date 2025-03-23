@@ -12,49 +12,43 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
 import debounce from "lodash/debounce";
-import { getEntryById, updateEntry } from "@/utils/functions/storage";
-
-interface Entry {
-  id: string;
-  date?: string;
-  title?: string;
-  content?: string;
-  image?: string;
-}
+import {
+  getEntryById,
+  updateEntry,
+  selectAndSaveImage,
+} from "@/utils/functions/storage";
+import { Entry, PanHandlerStateChangeEvent } from "@/utils/types";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { map, set } from "lodash";
 
 export default function NotesScreen() {
+  const defaultImage = Image.resolveAssetSource(
+    require("@/assets/images/entry_default_cover_min.webp")
+  ).uri;
+
   const { id } = useLocalSearchParams();
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
+  const [image, setImage] = useState(defaultImage);
+  const [rating, setRating] = useState<number>(0);
 
-  const [fontSize, setFontSize] = useState(17);
+  const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
   const scrollViewRef = useRef<ScrollView>(null);
-  const insets = useSafeAreaInsets();
 
   const textColor = useThemeColor({}, "text");
   const backgroundColor = useThemeColor({}, "background");
 
-  const [loading, setLoading] = useState(true);
-
   const handleContentSizeChange = useCallback(() => {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   }, []);
-
-  const router = useRouter();
-
-  interface PanHandlerStateChangeEvent {
-    nativeEvent: {
-      state: number;
-      oldState: number;
-      translationX: number;
-    };
-  }
 
   const onPanHandlerStateChange = useCallback(
     (event: PanHandlerStateChangeEvent) => {
@@ -72,14 +66,15 @@ export default function NotesScreen() {
   useFocusEffect(
     useCallback(() => {
       const fetchEntries = async () => {
-        setLoading(true);
         const entry = await getEntryById(Array.isArray(id) ? id[0] : id);
         if (entry) {
           setText(entry.content || "");
           setTitle(entry.title || "");
           setDate(entry.date || "");
-          setLoading(false);
+          setRating(entry.rating || 0);
+          setImage(entry.imageUri || defaultImage);
         }
+        setLoading(false);
       };
 
       fetchEntries();
@@ -87,28 +82,54 @@ export default function NotesScreen() {
   );
 
   const saveChanges = useCallback(
-    debounce(async (newTitle: string, newText: string) => {
+    debounce(async (updatedField: Partial<Entry>) => {
       if (!id) return;
 
-      const entry: Entry = {
+      await updateEntry({
         id: Array.isArray(id) ? id[0] : id,
-        title: newTitle,
-        content: newText,
-      };
-
-      await updateEntry(entry);
+        ...updatedField,
+      });
     }, 500),
     [id]
   );
 
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle);
-    saveChanges(newTitle, text);
+    saveChanges({ title: newTitle });
   };
 
   const handleTextChange = (newText: string) => {
     setText(newText);
-    saveChanges(title, newText);
+    saveChanges({ content: newText });
+  };
+
+  const handleRatingChange = (newRating: number) => {
+    setRating(newRating);
+    saveChanges({ rating: newRating });
+  };
+
+  const handleImageChange = async () => {
+    const imageUri = await selectAndSaveImage();
+
+    if (imageUri) {
+      setImage(imageUri);
+      await saveEntryImage(imageUri);
+    } else {
+      console.log("No se seleccionó ninguna imagen.");
+    }
+  };
+
+  const saveEntryImage = async (newImageUri: string) => {
+    if (!id) return;
+
+    const entry: Entry = {
+      id: Array.isArray(id) ? id[0] : id,
+      title,
+      content: text,
+      imageUri: newImageUri,
+    };
+
+    await updateEntry(entry);
   };
 
   return (
@@ -122,29 +143,40 @@ export default function NotesScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={0}
       >
+        <TouchableOpacity onPress={handleImageChange}>
+          <Image source={{ uri: image }} style={styles.coverImage} />
+        </TouchableOpacity>
         {loading ? (
           <View style={{ padding: 20 }}>
             <ActivityIndicator size="large" color={textColor} />
           </View>
         ) : (
           <>
-            <View>
-              <Image
-                source={require("@/assets/images/pen_book.webp")}
-                style={styles.coverImage}
+            <View style={styles.header}>
+              <TextInput
+                style={[styles.titleInput, { color: textColor }]}
+                placeholder="Title"
+                placeholderTextColor="#999"
+                maxLength={100}
+                value={title}
+                onChangeText={handleTitleChange}
               />
-              <View style={styles.header}>
-                <TextInput
-                  style={[styles.titleInput, { color: textColor }]}
-                  placeholder="Title"
-                  placeholderTextColor="#999"
-                  maxLength={100}
-                  value={title}
-                  onChangeText={handleTitleChange}
-                />
-              </View>
-              <Text style={styles.dateText}>{date}</Text>
             </View>
+            <View style={styles.subheading}>
+              <Text style={styles.dateText}>{date}</Text>
+              <View style={styles.ratingContainer}>
+                {map([1, 2, 3, 4, 5], (i, _index) => (
+                  <TouchableOpacity key={_index} onPress={() => handleRatingChange(i)}>
+                    <IconSymbol
+                      name={i <= rating ? "star.fill" : "star"}
+                      size={20}
+                      color={textColor}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+            <View style={styles.separator} />
             <ScrollView
               ref={scrollViewRef}
               style={styles.scrollView}
@@ -155,7 +187,7 @@ export default function NotesScreen() {
                 style={[
                   styles.noteInput,
                   {
-                    fontSize,
+                    fontSize: 17,
                     color: textColor,
                   },
                 ]}
@@ -191,17 +223,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  subheading: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+  },
+  ratingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 15,
+  },
   titleInput: {
     fontSize: 28,
     fontWeight: "600",
     flex: 1,
   },
   dateText: {
-    paddingHorizontal: 16,
     marginTop: 16,
     marginBottom: 16,
     fontSize: 14,
     color: "#999",
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#CCC",
+    marginHorizontal: 16,
+    marginBottom: 16,
   },
   scrollView: {
     flex: 1,
@@ -209,9 +257,8 @@ const styles = StyleSheet.create({
   noteInput: {
     flex: 1,
     lineHeight: 26,
-    paddingHorizontal: 16, 
+    paddingHorizontal: 16,
     marginBottom: 100,
     minHeight: "100%",
   },
 });
-

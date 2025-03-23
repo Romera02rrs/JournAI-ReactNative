@@ -1,14 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
-
-
-interface Entry {
-  id: string;
-  date?: string;
-  title?: string;
-  content?: string;
-  image?: string;
-}
+import * as ImagePicker from 'expo-image-picker';
+import { Entry } from '@/utils/types';
 
 const SCROLL_POSITION_KEY = 'diary_scroll_position';
 const ENTRIES_DIRTY_KEY = "entries_dirty";
@@ -16,6 +9,8 @@ const ENTRIES_DIRTY_KEY = "entries_dirty";
 export const markEntriesAsDirty = async () => {
   await AsyncStorage.setItem(ENTRIES_DIRTY_KEY, "true");
 };
+
+{/** Manejo del dirty */}
 
 /**
  * Limpia la marca de suciedad de las entradas
@@ -32,6 +27,8 @@ export const areEntriesDirty = async (): Promise<boolean> => {
   const flag = await AsyncStorage.getItem(ENTRIES_DIRTY_KEY);
   return flag === "true";
 };
+
+{/** Manejo del scroll */}
 
 /**
  * Guarda la posición del scroll en AsyncStorage
@@ -59,6 +56,8 @@ export const getScrollPosition = async (): Promise<number> => {
   }
 };
 
+{/** Manejo de las entradas */}
+
 /**
  * Guarda una nueva entrada en AsyncStorage
  * @param {Object} entry - Objeto con id, title, text, imageUri
@@ -84,7 +83,7 @@ export const saveEntry = async (entry: Entry) => {
  * Actualiza una entrada existente en AsyncStorage por ID
  * @param {Entry} updatedEntry - Objeto con id, title, content, image, date
  */
-export const updateEntry = async (updatedEntry: Entry) => {
+export const updateEntry = async (updatedEntry: Partial<Entry> & { id: string }) => {
   try {
     const storedEntries = await AsyncStorage.getItem('journal_entries');
     let entries: Entry[] = storedEntries ? JSON.parse(storedEntries) : [];
@@ -92,77 +91,23 @@ export const updateEntry = async (updatedEntry: Entry) => {
     const index = entries.findIndex(entry => entry.id === updatedEntry.id);
 
     if (index !== -1) {
-      const existingEntry = entries[index];
       entries[index] = {
-        ...existingEntry,
-        title: updatedEntry.title,
-        content: updatedEntry.content,
+        ...entries[index],
+        ...updatedEntry,
       };
+      console.log('Entrada actualizada con éxito');
     } else {
-      console.error('No se encontró la entrada a actualizar, se crearán nuevas entradas');
-      entries.push(updatedEntry);
+      console.warn('No se encontró la entrada, se agregará una nueva entrada:', updatedEntry);
+      entries.push(updatedEntry as Entry);
     }
 
     await AsyncStorage.setItem('journal_entries', JSON.stringify(entries));
     await markEntriesAsDirty();
-
-    console.log('Entrada actualizada con éxito');
   } catch (error) {
     console.error('Error al actualizar la entrada:', error);
   }
 };
 
-/**
- * Obtiene una entrada específica por su ID (fecha)
- * @param {string} id - Fecha en formato YYYY-MM-DD
- */
-export const getEntryById = async (id: string) => {
-  try {
-    const storedEntries = await AsyncStorage.getItem('journal_entries');
-    const entries = storedEntries ? JSON.parse(storedEntries) : [];
-    
-    return entries.find((entry: Entry) => entry.id === id) || null;
-  } catch (error) {
-    console.error('Error al obtener la entrada:', error);
-    return null;
-  }
-};
-
-/**
- * Obtiene todas las entradas almacenadas
- */
-export const getAllEntries = async () => {
-  try {
-    const storedEntries = await AsyncStorage.getItem('journal_entries');
-    return storedEntries ? JSON.parse(storedEntries) : [];
-  } catch (error) {
-    console.error('Error al obtener las entradas:', error);
-    return [];
-  }
-};
-
-/**
- * Edita una entrada existente
- * @param {string} id - Fecha en formato YYYY-MM-DD
- * @param {Object} updatedEntry - Objeto con los datos actualizados
- */
-export const editEntry = async (id: string, updatedEntry: Entry) => {
-  try {
-    const storedEntries = await AsyncStorage.getItem('journal_entries');
-    let entries = storedEntries ? JSON.parse(storedEntries) : [];
-
-    // Buscar la entrada y actualizarla
-    entries = entries.map((entry: Entry) => 
-      entry.id === id ? { ...entry, ...updatedEntry } : entry
-    );
-
-    await AsyncStorage.setItem('journal_entries', JSON.stringify(entries));
-    await markEntriesAsDirty();
-    console.log('Entrada editada con éxito');
-  } catch (error) {
-    console.error('Error al editar la entrada:', error);
-  }
-};
 
 /**
  * Elimina una entrada por su ID (fecha)
@@ -185,26 +130,31 @@ export const deleteEntry = async (id: string) => {
 };
 
 /**
- * Guarda una imagen en el almacenamiento local del dispositivo y devuelve su URI
- * @param {string} uri - URI temporal de la imagen seleccionada
- * @returns {string} - URI local de la imagen guardada
+ * Obtiene una entrada específica por su ID (fecha)
+ * @param {string} id - Fecha en formato YYYY-MM-DD
  */
-export const saveImageToDevice = async (uri: string) => {
+export const getEntryById = async (id: string): Promise<Entry | null> => {
   try {
-    const fileName = uri.split('/').pop(); // Obtener el nombre del archivo
-    const newPath = `${FileSystem.documentDirectory}${fileName}`;
-
-    await FileSystem.moveAsync({
-      from: uri,
-      to: newPath,
-    });
-    await markEntriesAsDirty();
-
-    console.log('Imagen guardada en:', newPath);
-    return newPath; // Retorna la nueva URI local
+    const storedEntries = await AsyncStorage.getItem('journal_entries');
+    const entries = storedEntries ? JSON.parse(storedEntries) : [];
+    
+    return entries.find((entry: Entry) => entry.id === id) || null;
   } catch (error) {
-    console.error('Error al guardar la imagen:', error);
+    console.error('Error al obtener la entrada:', error);
     return null;
+  }
+};
+
+/**
+ * Obtiene todas las entradas almacenadas
+ */
+export const getAllEntries = async () => {
+  try {
+    const storedEntries = await AsyncStorage.getItem('journal_entries');
+    return storedEntries ? JSON.parse(storedEntries) : [];
+  } catch (error) {
+    console.error('Error al obtener las entradas:', error);
+    return [];
   }
 };
 
@@ -237,6 +187,75 @@ export const removeAllEntries = async () => {
     return true;
   } catch (error) {
     console.error('Error al eliminar las entradas:', error);
+    return false;
+  }
+};
+
+{/** Manejo de las imagenes */}
+
+/**
+ * Selecciona una imagen desde la galería y la guarda localmente
+ * @returns {string | null} URI local permanente de la imagen guardada
+ */
+export const selectAndSaveImage = async (): Promise<string | null> => {
+  try {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // <- así es como debe ser ahora
+      allowsEditing: true,
+      quality: 0.8,
+    });
+    
+
+    if (!result.canceled) {
+      const uri = result.assets[0].uri;
+      const localUri = await saveImageToDevice(uri);
+      return localUri;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error al seleccionar y guardar imagen:', error);
+    return null;
+  }
+};
+
+/**
+ * Guarda una imagen en el almacenamiento local del dispositivo y devuelve su URI
+ * @param {string} uri - URI temporal de la imagen seleccionada
+ * @returns {string} - URI local de la imagen guardada
+ */
+export const saveImageToDevice = async (uri: string): Promise<string | null> => {
+  try {
+    const fileName = uri.split('/').pop();
+    const newPath = `${FileSystem.documentDirectory}${fileName}`;
+
+    await FileSystem.copyAsync({
+      from: uri,
+      to: newPath,
+    });
+
+    await markEntriesAsDirty();
+    console.log('Imagen guardada en:', newPath);
+    return newPath;
+  } catch (error) {
+    console.error('Error al guardar la imagen:', error);
+    return null;
+  }
+};
+
+/**
+ * Elimina una imagen guardada localmente en el dispositivo
+ * @param uri URI local de la imagen a eliminar
+ */
+export const deleteImageFromDevice = async (uri: string): Promise<boolean> => {
+  try {
+    await FileSystem.deleteAsync(uri, { idempotent: true });
+
+    await markEntriesAsDirty();
+    console.log('Imagen eliminada:', uri);
+    return true;
+  } catch (error) {
+    console.error('Error al eliminar la imagen:', error);
     return false;
   }
 };

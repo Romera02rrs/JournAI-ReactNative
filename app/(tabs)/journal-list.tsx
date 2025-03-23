@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -25,22 +25,8 @@ import {
   getScrollPosition,
   clearEntriesDirtyFlag,
 } from "@/utils/functions/storage";
+import { Entry, ScrollEvent } from "@/utils/types";
 
-interface Entry {
-  id: string;
-  date?: string;
-  title?: string;
-  content?: string;
-  imageUri?: string;
-}
-
-interface ScrollEvent {
-  nativeEvent: {
-    contentOffset: {
-      y: number;
-    };
-  };
-}
 
 export default function DiaryEntriesScreen() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -51,9 +37,9 @@ export default function DiaryEntriesScreen() {
   const backgroundColor = useThemeColor({}, "background");
   const entryBackgroundColor = useThemeColor({}, "soft");
   const textColor = useThemeColor({}, "text");
+
   const parallaxRef = useRef<ParallaxScrollRef>(null);
   const hasLoadedEntriesOnce = useRef(false);
-  // Referencia para el TextInput de búsqueda
   const searchInputRef = useRef<RNTextInput>(null);
 
   let position = 0;
@@ -133,7 +119,6 @@ export default function DiaryEntriesScreen() {
         This app includes example code to help you get started.
       </ThemedText>
       <View style={[styles.searchContainer, { backgroundColor: entryBackgroundColor }]}>
-        {/* Envoltura del icono de la lupa para poder hacerlo clickeable */}
         <TouchableOpacity onPress={() => searchInputRef.current?.focus()}>
           <IconSymbol
             name="magnifyingglass"
@@ -142,7 +127,6 @@ export default function DiaryEntriesScreen() {
             style={styles.searchIconLeft}
           />
         </TouchableOpacity>
-        {/* Input de búsqueda con ref para poder hacer focus */}
         <TextInput
           ref={searchInputRef}
           placeholder="Search"
@@ -151,7 +135,6 @@ export default function DiaryEntriesScreen() {
           value={textSearch}
           onChangeText={handleTextSearch}
         />
-        {/* Botón para limpiar la búsqueda (solo se muestra cuando hay texto) */}
         {textSearch.length > 0 && (
           <TouchableOpacity onPress={() => handleTextSearch("")}>
             <IconSymbol

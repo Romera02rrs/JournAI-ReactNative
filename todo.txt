@@ -1,1 +1,5 @@
-//TODO: Implementar la funcionalidad de la foto en la entrada, si no hay foto, se mostrará un boton para añadir una foto.
+añadir estrellas de puntuación al lado de la fecha
+
+recortar imagen cover la parte de abajo
+
+(NOBRIDGE) WARN  [expo-image-picker] `ImagePicker.MediaTypeOptions` have been deprecated. Use `ImagePicker.MediaType` or an array of `ImagePicker.MediaType` instead.
