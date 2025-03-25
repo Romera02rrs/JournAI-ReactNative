@@ -18,6 +18,7 @@ type Props = PropsWithChildren<{
   headerImage: ReactElement;
   headerBackgroundColor: { dark: string; light: string };
   onScroll?: (event: any) => void;
+  useGradient?: boolean;
 }>;
 
 export interface ParallaxScrollRef {
@@ -25,7 +26,7 @@ export interface ParallaxScrollRef {
 }
 
 const ParallaxScrollView = forwardRef<ParallaxScrollRef, Props>(
-  ({ headerImage, headerBackgroundColor, children, onScroll }, ref) => {
+  ({ headerImage, headerBackgroundColor, children, onScroll, useGradient }, ref) => {
     const colorScheme = useColorScheme() ?? 'light';
     const scrollRef = useAnimatedRef<Animated.ScrollView>();
     const scrollOffset = useScrollViewOffset(scrollRef);
@@ -58,7 +59,7 @@ const ParallaxScrollView = forwardRef<ParallaxScrollRef, Props>(
     }));
 
     return (
-      <ThemedView style={styles.container}>
+      <ThemedView style={styles.container} useGradient={useGradient}>
         <Animated.ScrollView
           ref={scrollRef}
           onScroll={(event) => {
@@ -77,7 +78,7 @@ const ParallaxScrollView = forwardRef<ParallaxScrollRef, Props>(
           >
             {headerImage}
           </Animated.View>
-          <ThemedView style={styles.content}>{children}</ThemedView>
+          <ThemedView useGradient={useGradient} style={styles.content}>{children}</ThemedView>
         </Animated.ScrollView>
       </ThemedView>
     );

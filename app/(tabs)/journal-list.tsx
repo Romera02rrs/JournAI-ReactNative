@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   View,
   TextInput as RNTextInput,
+  Image,
 } from "react-native";
 import ParallaxScrollView, {
   ParallaxScrollRef,
@@ -27,7 +28,7 @@ import {
 } from "@/utils/functions/storage";
 import { Entry, ScrollEvent } from "@/utils/types";
 import { getTodayId } from "@/utils/functions/getTodayId";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function DiaryEntriesScreen() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -101,25 +102,23 @@ export default function DiaryEntriesScreen() {
 
   return (
     <ParallaxScrollView
+      useGradient
       ref={parallaxRef}
       onScroll={handleScrollEvent}
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
+        <Image
+          source={require("@/assets/images/Journal-list_cover.webp")}
+          style={styles.coverImage}
         />
       }
     >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>
-        This app includes example code to help you get started.
-      </ThemedText>
-      <View style={[styles.searchContainer, { backgroundColor: entryBackgroundColor }]}>
+      <View
+        style={[
+          styles.searchContainer,
+          { backgroundColor: entryBackgroundColor },
+        ]}
+      >
         <TouchableOpacity onPress={() => searchInputRef.current?.focus()}>
           <IconSymbol
             name="magnifyingglass"
@@ -152,41 +151,64 @@ export default function DiaryEntriesScreen() {
           <ActivityIndicator size="large" color={textColor} />
         </View>
       ) : (
-        <ScrollView contentContainerStyle={[styles.listContent, { backgroundColor }]}>
-          
+        <ScrollView contentContainerStyle={[styles.listContent]}>
           <TouchableOpacity
-              onPress={() => {
-                saveScrollPosition(position);
-                 router.push(`/journal-editor/${getTodayId()}`);
-              }}
+            onPress={() => {
+              saveScrollPosition(position);
+              router.push(`/journal-editor/${getTodayId()}`);
+            }}
+          >
+            <LinearGradient
+              //colors={['#FFEA70', '#FFA000']}
+              colors={["#f5d166", "#e5ab4f"]} // Colores más mate y menos vibrantes
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.entryContainer, styles.todayEntry]}
             >
-              <LinearGradient
-                //colors={['#FFEA70', '#FFA000']}
-                colors={['#f5d166', '#e5ab4f']} // Colores más mate y menos vibrantes
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[styles.entryContainer, styles.todayEntry]}
+              <Text style={[styles.entryDate, { color: "#3E2C00" }]}>
+                TODAY
+              </Text>
+              <Text
+                style={[
+                  styles.entryTitle,
+                  { color: "#3E2C00", fontWeight: "600" },
+                ]}
               >
-                <Text style={[styles.entryDate, { color: '#3E2C00' }]}>TODAY</Text>
-                <Text style={[styles.entryTitle, { color: '#3E2C00', fontWeight: '600' }]}>TODAY</Text>
-                <Text style={[styles.entryContent, { color: '#3E2C00' }]} numberOfLines={2}>
-                  TODAY
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
+                TODAY
+              </Text>
+              <Text
+                style={[styles.entryContent, { color: "#3E2C00" }]}
+                numberOfLines={2}
+              >
+                TODAY
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
 
           {entries.map((item: Entry) => (
             <TouchableOpacity
               key={item.id}
               onPress={() => {
                 saveScrollPosition(position);
-                 router.push(`/journal-editor/${item.id}`);
+                router.push(`/journal-editor/${item.id}`);
               }}
             >
-              <ThemedView style={[styles.entryContainer, { backgroundColor: entryBackgroundColor }]}>
-                <Text style={[styles.entryDate, { color: textColor }]}>{item.date}</Text>
-                <Text style={[styles.entryTitle, { color: textColor }]}>{item.title}</Text>
-                <Text style={[styles.entryContent, { color: textColor }]} numberOfLines={2}>
+              <ThemedView
+                style={[
+                  styles.entryContainer,
+                  { backgroundColor: entryBackgroundColor as string },
+                ]}
+              >
+                <Text style={[styles.entryDate, { color: textColor }]}>
+                  {item.date}
+                </Text>
+                <Text style={[styles.entryTitle, { color: textColor }]}>
+                  {item.title}
+                </Text>
+                <Text
+                  style={[styles.entryContent, { color: textColor }]}
+                  numberOfLines={2}
+                >
                   {item.content}
                 </Text>
               </ThemedView>
@@ -205,9 +227,16 @@ const styles = StyleSheet.create({
     left: -35,
     position: "absolute",
   },
+  coverImage: {
+    objectFit: "cover",
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+  },
   titleContainer: {
     flexDirection: "row",
     gap: 8,
+    backgroundColor: 'transparent',
   },
   searchContainer: {
     flexDirection: "row",
