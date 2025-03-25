@@ -38,6 +38,7 @@ export function ThemedView({
     return Array.from({ length: count }, (_, i) => {
       const top = i * spacing + Math.random() * 50;
       const isLeft = Math.random() > 0.5;
+      const offset = Math.random() * (140) - 180;
       const rotation = Math.random() * 40 - 20; // entre -20 y +20
       const opacity = 0.4 + Math.random() * 0.3; // entre 0.4 y 0.7
 
@@ -45,7 +46,7 @@ export function ThemedView({
         key: `tear-${i}`,
         style: {
           top,
-          [isLeft ? "left" : "right"]: -40,
+          [isLeft ? "left" : "right"]: offset,
           transform: [{ rotate: `${rotation}deg` }],
           opacity,
         },
