@@ -1,2 +1,4 @@
 // Opción de frase: know yourself, grow Every Day.
 // Precargar imagen del journal-list
+// aplicar el texto auto-saving... en el journal-edit
+// valorar el hacer efectos animados al cambiar de página
