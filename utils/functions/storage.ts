@@ -159,6 +159,14 @@ export const getAllEntries = async () => {
 };
 
 /**
+ * Obtiene las ultimas 3 entradas almacenadas
+ */
+export const getRecentEntryes = async () => {
+  const allEntries = await getAllEntries();
+  return allEntries.slice(-3).reverse();
+};
+
+/**
  * Añade una lista de entradas ya existentes a AsyncStorage
  * @param {Array} entries - Lista de entradas a guardar
  * @returns {boolean} - True si se guardaron correctamente
