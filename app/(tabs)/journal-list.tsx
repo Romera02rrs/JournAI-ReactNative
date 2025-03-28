@@ -86,7 +86,7 @@ export default function DiaryEntriesScreen() {
         : (["#ff383bd0", "#ff910095"] as [string, string]),
     green:
       colorScheme === "dark"
-        ? (["#192b2775", "#1a433675"] as [string, string])
+        ? (["#1b2e2a75", "#1a433675"] as [string, string])
         : (["#e6fdf2", "#effae4"] as [string, string]),
     silver:
       colorScheme === "dark"
@@ -97,23 +97,23 @@ export default function DiaryEntriesScreen() {
   const ratingColorsGradient = {
     5: {
       backgroundColor: ["#ECFDF5", "#D6F5E9"],
-      color: "#2F5D50", // Verde medio oscuro
+      color: "#2F5D50",
     },
     4: {
       backgroundColor: ["#E6F4FA", "#D3EDF7"],
-      color: "#355A7A", // Azul apagado, medio oscuro
+      color: "#355A7A",
     },
     3: {
       backgroundColor: ["#FAF9E6", "#F4F1C8"],
-      color: "#7A6405", // Mostaza tostado, más sobrio
+      color: "#7A6405",
     },
     2: {
       backgroundColor: ["#FFF3E6", "#FFE3CC"],
-      color: "#A05318", // Naranja tierra, medio apagado
+      color: "#A05318",
     },
     1: {
       backgroundColor: ["#FFE4E6", "#FDCAD0"],
-      color: "#B3364A", // Rojo apagado, tipo cereza suave
+      color: "#B3364A",
     },
   };
   

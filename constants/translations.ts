@@ -1,3 +1,5 @@
+import { t } from "i18next";
+
 export const resources = {
   en: {
     translation: {
@@ -10,6 +12,8 @@ export const resources = {
         home: "Home",
         journal: "Journal",
         explore: "Explore",
+        settings: "Settings",
+        test: "Test",
       },
       entry: {
         entry: "Entry",
@@ -55,6 +59,8 @@ export const resources = {
         home: "Inicio",
         journal: "Diario",
         explore: "Explorar",
+        settings: "Configuración",
+        test: "Prueba",
       },
       entry: {
         entry: "Entrada",

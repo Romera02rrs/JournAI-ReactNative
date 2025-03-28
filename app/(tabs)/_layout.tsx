@@ -32,8 +32,8 @@ export default function TabLayout() {
         name="index"
         options={{
           title: t("tabs.home"),
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={29} name="house.fill" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <IconSymbol size={29} name="house" color={color} />
           ),
         }}
       />
@@ -47,11 +47,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="settings"
         options={{
-          title: t("tabs.explore"),
+          title: t("tabs.settings"),
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="gearshape" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="test"
+        options={{
+          title: t("tabs.test"),
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="testtube.2" color={color} />
           ),
         }}
       />
