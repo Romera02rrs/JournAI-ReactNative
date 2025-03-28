@@ -30,39 +30,39 @@ export default function TabLayout() {
     >
       <Tabs.Screen
         name="index"
-        options={{
+        options={() => ({
           title: t("tabs.home"),
           tabBarIcon: ({ color, focused }) => (
             <IconSymbol size={29} name="house" color={color} />
           ),
-        }}
+        })}
       />
       <Tabs.Screen
         name="journal-list"
-        options={{
+        options={() => ({
           title: t("tabs.journal"),
           tabBarIcon: ({ color }) => (
             <IconSymbol size={29} name="book" color={color} />
           ),
-        }}
+        })}
       />
       <Tabs.Screen
         name="settings"
-        options={{
+        options={() => ({
           title: t("tabs.settings"),
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="gearshape" color={color} />
           ),
-        }}
+        })}
       />
       <Tabs.Screen
         name="test"
-        options={{
+        options={() => ({
           title: t("tabs.test"),
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="testtube.2" color={color} />
           ),
-        }}
+        })}
       />
     </Tabs>
   );
