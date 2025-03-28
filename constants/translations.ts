@@ -6,6 +6,11 @@ export const resources = {
       greeting_1: "Good morning",
       greeting_2: "Good afternoon",
       greeting_3: "Good evening",
+      tabs: {
+        home: "Home",
+        journal: "Journal",
+        explore: "Explore",
+      },
       entry: {
         entry: "Entry",
         entries: "Entries",
@@ -21,6 +26,22 @@ export const resources = {
         entries_this_week: "Entries this week",
         total_entries: "Total entries",
       },
+      journal_list: {
+        title: "Journal Entries",
+        caption: "Browse and search your past thoughts",
+        week_entries: "This Week's Entries",
+        days_completed: "Days completed",
+        search_placeholder: "Search entries...",
+      },
+      week_day: {
+        monday: "M",
+        tuesday: "T",
+        wednesday: "W",
+        thursday: "R",
+        friday: "F",
+        saturday: "S",
+        sunday: "U",
+      }
     },
   },
   es: {
@@ -30,6 +51,11 @@ export const resources = {
       greeting_1: "Buenos días",
       greeting_2: "Buenas tardes",
       greeting_3: "Buenas noches",
+      tabs: {
+        home: "Inicio",
+        journal: "Diario",
+        explore: "Explorar",
+      },
       entry: {
         entry: "Entrada",
         entries: "Entradas",
@@ -44,6 +70,22 @@ export const resources = {
         title: "Entradas del diario",
         entries_this_week: "Entradas esta semana",
         total_entries: "Entradas totales",
+      },
+      journal_list: {
+        title: "Entradas del Diario", 
+        caption: "Explora y busca tus pensamientos pasados",
+        week_entries: "Entradas de esta semana",
+        search_placeholder: "Buscar entradas...",
+        days_completed: "Días completados",
+      },
+      week_day: {
+        monday: "L",
+        tuesday: "M",
+        wednesday: "X",
+        thursday: "J",
+        friday: "V",
+        saturday: "S",
+        sunday: "D",
       },
     },
   },

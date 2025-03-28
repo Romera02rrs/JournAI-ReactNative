@@ -66,8 +66,8 @@ export default function HomeScreen() {
 
   const hour = today.getHours();
   let greeting = t("greeting_1");
-  if (hour >= 12 && hour < 21) greeting = t("greeting_2");
-  else if (hour >= 21) greeting = t("greeting_3");
+  if (hour >= 12 && hour < 20) greeting = t("greeting_2");
+  else if (hour >= 20 || hour < 5) greeting = t("greeting_3");
 
   useFocusEffect(
     useCallback(() => {
@@ -132,7 +132,7 @@ export default function HomeScreen() {
       >
         <View style={styles.entryHeader}>
           <Feather name="sun" size={32} color="#f59e0b" />
-          <Text style={[styles.entryLabel, { color: textColor }]}>
+          <Text style={[styles.entryLabel, { color: '#6b7280' }]}>
             {t("entry.today")}
           </Text>
         </View>

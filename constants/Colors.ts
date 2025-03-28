@@ -17,6 +17,7 @@ export const Colors = {
     soft: '#d7d9da',
     contrast: '#000',
     entry: '#fff',
+    softContrast : '#f8f8f8',
   },
   dark: {
     text: '#ECEDEE',
@@ -28,5 +29,6 @@ export const Colors = {
     soft: '#3a3e40',
     contrast: '#fff',
     entry: '#1D1F20',
+    softContrast : '#2c2f31',
   },
 };

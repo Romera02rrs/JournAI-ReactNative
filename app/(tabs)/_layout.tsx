@@ -7,10 +7,11 @@ import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { useTranslation } from "react-i18next";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
   return (
     <Tabs
       screenOptions={{
@@ -30,7 +31,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: t("tabs.home"),
           tabBarIcon: ({ color }) => (
             <IconSymbol size={29} name="house.fill" color={color} />
           ),
@@ -39,7 +40,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="journal-list"
         options={{
-          title: "Diario",
+          title: t("tabs.journal"),
           tabBarIcon: ({ color }) => (
             <IconSymbol size={29} name="book" color={color} />
           ),
@@ -48,7 +49,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="explore"
         options={{
-          title: "Explore",
+          title: t("tabs.explore"),
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
