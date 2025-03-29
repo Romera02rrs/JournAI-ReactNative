@@ -31,7 +31,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: t("tabs.home"),
           tabBarIcon: ({ color, focused }) => (
             <IconSymbol size={29} name="house" color={color} />
           ),
@@ -40,7 +40,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="journal-list"
         options={{
-          title: "Diary",
+          title: t("tabs.journal"),
           tabBarIcon: ({ color }) => (
             <IconSymbol size={29} name="book" color={color} />
           ),
@@ -49,7 +49,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: "Settings",
+          title: t("tabs.settings"),
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="gearshape" color={color} />
           ),
@@ -58,7 +58,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="test"
         options={{
-          title: "Test",
+          title: t("tabs.test"),
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="testtube.2" color={color} />
           ),

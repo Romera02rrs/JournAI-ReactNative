@@ -21,7 +21,7 @@ import {
   updateEntry,
   selectAndSaveImage,
 } from "@/utils/functions/storage";
-import { Entry, PanHandlerStateChangeEvent } from "@/utils/types";
+import { Entry, PanHandlerStateChangeEvent, Rating } from "@/utils/types";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { map, set } from "lodash";
@@ -37,8 +37,10 @@ export default function NotesScreen() {
   const [date, setDate] = useState("");
   const [image, setImage] = useState(defaultImage);
   const [rating, setRating] = useState<number>(0);
+  const ratings: Rating[] = [1, 2, 3, 4, 5];
 
   const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   const router = useRouter();
   const scrollViewRef = useRef<ScrollView>(null);
@@ -85,10 +87,14 @@ export default function NotesScreen() {
     debounce(async (updatedField: Partial<Entry>) => {
       if (!id) return;
 
+      setIsSaving(true); // Inicia el indicador de guardado
+
       await updateEntry({
         id: Array.isArray(id) ? id[0] : id,
         ...updatedField,
       });
+
+      setIsSaving(false); // Detén el indicador de guardado
     }, 500),
     [id]
   );
@@ -103,7 +109,7 @@ export default function NotesScreen() {
     saveChanges({ content: newText });
   };
 
-  const handleRatingChange = (newRating: number) => {
+  const handleRatingChange = (newRating: Rating) => {
     setRating(newRating);
     saveChanges({ rating: newRating });
   };
@@ -152,6 +158,11 @@ export default function NotesScreen() {
           </View>
         ) : (
           <>
+            {isSaving && (
+              <View style={styles.savingIndicator}>
+                <ActivityIndicator size="small" color={textColor} />
+              </View>
+            )}
             <View style={styles.header}>
               <TextInput
                 style={[styles.titleInput, { color: textColor }]}
@@ -165,8 +176,11 @@ export default function NotesScreen() {
             <View style={styles.subheading}>
               <Text style={styles.dateText}>{date}</Text>
               <View style={styles.ratingContainer}>
-                {map([1, 2, 3, 4, 5], (i, _index) => (
-                  <TouchableOpacity key={_index} onPress={() => handleRatingChange(i)}>
+                {map(ratings, (i, _index) => (
+                  <TouchableOpacity
+                    key={_index}
+                    onPress={() => handleRatingChange(i)}
+                  >
                     <IconSymbol
                       name={i <= rating ? "star.fill" : "star"}
                       size={20}
@@ -216,6 +230,15 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: 250,
     resizeMode: "cover",
+  },
+  savingIndicator: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "#fff",
+    padding: 5,
+    borderRadius: 5,
+    zIndex: 1,
   },
   header: {
     paddingHorizontal: 16,

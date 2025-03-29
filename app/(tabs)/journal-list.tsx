@@ -1,50 +1,48 @@
-import { useState, useRef, useCallback } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
-  Text,
-  ScrollView,
   ActivityIndicator,
-  View,
-  TextInput as RNTextInput,
   Image,
+  ScrollView,
   StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
+import { useColorScheme } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useFocusEffect } from "@react-navigation/native";
 import ParallaxScrollView, {
   ParallaxScrollRef,
 } from "@/components/ParallaxScrollView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { TextInput } from "react-native";
-import { router } from "expo-router";
-import { useFocusEffect } from "@react-navigation/native";
 import {
-  getAllEntries,
   areEntriesDirty,
-  saveScrollPosition,
-  getScrollPosition,
   clearEntriesDirtyFlag,
+  getAllEntries,
+  getScrollPosition,
+  saveScrollPosition,
 } from "@/utils/functions/storage";
-import { Entry, ScrollEvent } from "@/utils/types";
 import { getTodayId } from "@/utils/functions/getTodayId";
-import { LinearGradient } from "expo-linear-gradient";
+import {
+  Entry,
+  GradientColors,
+  RatingColorsGradient,
+  ScrollEvent,
+} from "@/utils/types";
 import { useTranslation } from "react-i18next";
-import { useColorScheme } from "react-native";
 import locale from "@/i18n";
-import { Feather } from "@expo/vector-icons";
-
-const today = new Date();
-const options: Intl.DateTimeFormatOptions = {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-};
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { startOfWeek, endOfWeek, isWithinInterval } from "date-fns";
 
 export default function DiaryEntriesScreen() {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [allEntries, setAllEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [textSearch, setTextSearch] = useState("");
+  const [isTodayEntryWritten, setIsTodayEntryWritten] = useState(false);
 
   const entryBackgroundColor = useThemeColor({}, "soft");
   const contrast = useThemeColor({}, "contrast");
@@ -54,11 +52,15 @@ export default function DiaryEntriesScreen() {
 
   const parallaxRef = useRef<ParallaxScrollRef>(null);
   const hasLoadedEntriesOnce = useRef(false);
-  const searchInputRef = useRef<RNTextInput>(null);
+  const searchInputRef = useRef<TextInput>(null);
   const { t } = useTranslation();
   const colorScheme = useColorScheme();
 
   let position = 0;
+
+  const today = new Date();
+  const weekStart = startOfWeek(today, { weekStartsOn: 1 }); // Lunes
+  const weekEnd = endOfWeek(today, { weekStartsOn: 1 }); // Domingo
 
   const weekDays = [
     t("week_day.monday"),
@@ -70,31 +72,49 @@ export default function DiaryEntriesScreen() {
     t("week_day.sunday"),
   ];
 
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  const entriesThisWeek = entries.filter((entry) => {
+    const entryDate = new Date(entry.date || "");
+    return isWithinInterval(entryDate, { start: weekStart, end: weekEnd });
+  });
+
+  const completedDays = entriesThisWeek.map((entry) =>
+    new Date(entry.date || "").getDay()
+  );
+
   const coverImage =
     colorScheme === "dark"
       ? require("@/assets/images/journal-list_cover_dark.webp")
       : require("@/assets/images/journal-list_cover_light.webp");
 
-  const gradients = {
+  const gradients: GradientColors = {
     purlple:
       colorScheme === "dark"
-        ? (["#2e2a4d50", "#261b2eaa"] as [string, string])
-        : (["#e3f5fe", "#f1e3fb"] as [string, string]),
+        ? ["#342f5850", "#1f1625aa"]
+        : ["#e3f5fe", "#f1e3fb"],
+    red:
+      colorScheme === "dark"
+      ? ["#3a1e1e80", "#3a2f1eaa"]
+      : ["#f8d6d6", "#fff1daba"],
     orange:
       colorScheme === "dark"
-        ? (["#b92a2cd0", "#a55d0094"] as [string, string])
-        : (["#ff383bd0", "#ff910095"] as [string, string]),
+        ? ["#b92a2cd0", "#a55d0094"]
+        : ["#ff383bd0", "#ff910095"],
     green:
       colorScheme === "dark"
-        ? (["#1b2e2a75", "#1a433675"] as [string, string])
-        : (["#e6fdf2", "#effae4"] as [string, string]),
+        ? ["#1b2e2a75", "#1b4a2175"]
+        : ["#e6fdf2", "#effae4"],
     silver:
-      colorScheme === "dark"
-        ? (["#232527", "#1F1F22"] as [string, string])
-        : (["#efefef", "#fcfcfc"] as [string, string]),
+      colorScheme === "dark" ? ["#232527", "#1F1F22"] : ["#efefef", "#fcfcfc"],
   };
 
-  const ratingColorsGradient = {
+  const ratingColorsGradient: RatingColorsGradient = {
     5: {
       backgroundColor: ["#ECFDF5", "#D6F5E9"],
       color: "#2F5D50",
@@ -116,7 +136,7 @@ export default function DiaryEntriesScreen() {
       color: "#B3364A",
     },
   };
-  
+
   const handleScrollEvent = (event: ScrollEvent) => {
     position = event.nativeEvent.contentOffset.y;
   };
@@ -152,6 +172,11 @@ export default function DiaryEntriesScreen() {
         });
         setAllEntries(sorted);
         setEntries(sorted);
+        const isTodayWritten = storedEntries.some(
+          (entry: Entry) =>
+            new Date(entry.date || "").toDateString() === today.toDateString()
+        );
+        setIsTodayEntryWritten(isTodayWritten);
 
         hasLoadedEntriesOnce.current = true;
         setLoading(false);
@@ -229,20 +254,36 @@ export default function DiaryEntriesScreen() {
             {t("journal_list.week_entries")}
           </Text>
           <Text style={styles.weekSubtitle}>
-            5/7 {t("journal_list.days_completed")}
+            {entriesThisWeek.length}/7 {t("journal_list.days_completed")}
           </Text>
         </View>
         <View style={styles.weekGrid}>
           {weekDays.map((day, index) => {
-            const hasEntry = [0, 1, 2, 4, 5].includes(index);
+            const hasEntry = completedDays.includes(index + 1);
+            const isToday = today.getDay() === index + 1;
+
             return hasEntry ? (
               <LinearGradient
                 key={index}
                 colors={gradients.green}
-                style={[styles.dayCellGradient, { borderColor: softContrast }]}
+                style={[
+                  styles.dayCellGradient,
+                  {
+                    borderWidth: isToday ? 1.2 : 0,
+                    borderColor: isToday ? "#84cc16" : "transparent",
+                  },
+                ]}
               >
                 <View style={styles.dayCellInner}>
-                  <Text style={styles.dayLabel}>{day}</Text>
+                  <Text
+                    style={[
+                      styles.dayLabel,
+                      styles.dayLabelActive,
+                      { color: textColor, shadowColor: contrast },
+                    ]}
+                  >
+                    {day}
+                  </Text>
                   <LinearGradient
                     colors={gradients.orange}
                     style={styles.dayIndicator}
@@ -252,11 +293,25 @@ export default function DiaryEntriesScreen() {
             ) : (
               <View
                 key={index}
-                style={[styles.dayCell, styles.dayCellInactive]}
+                style={[
+                  styles.dayCell,
+                  styles.dayCellInactive,
+                  {
+                    borderWidth: isToday ? 1.2 : 0,
+                    borderColor: isToday ? "#B3364A" : "transparent",
+                  },
+                ]}
               >
-                <Text style={styles.dayLabel}>{day}</Text>
+                <Text
+                  style={[styles.dayLabel, { color: entryBackgroundColor }]}
+                >
+                  {day}
+                </Text>
                 <View
-                  style={[styles.dayIndicator, styles.dayIndicatorInactive]}
+                  style={[
+                    styles.dayIndicator,
+                    { backgroundColor: entryBackgroundColor },
+                  ]}
                 />
               </View>
             );
@@ -282,7 +337,7 @@ export default function DiaryEntriesScreen() {
               ]}
             >
               <LinearGradient
-                colors={gradients.purlple}
+                colors={isTodayEntryWritten ? gradients.purlple : gradients.red }
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={[
@@ -292,7 +347,7 @@ export default function DiaryEntriesScreen() {
                 ]}
               >
                 <Text style={[styles.entryDate, { fontSize: 13.5 }]}>
-                  miércoles, 29 de marzo de 2023
+                  {today.toLocaleDateString(locale.language, options)}
                 </Text>
                 <Text
                   style={[
@@ -300,19 +355,30 @@ export default function DiaryEntriesScreen() {
                     { color: textColor, fontSize: 21 },
                   ]}
                 >
-                  El día de hoy
+                  {t("journal_list.today_entry.title")}
                 </Text>
                 <Text
                   style={[styles.entryContent, { fontSize: 14.5 }]}
                   numberOfLines={2}
                 >
-                  Hoy ha sido un buen día en el trabajo, he ido al gym y he
-                  comido bien. Despúes de la cena he visto una serie y he
-                  escrito un poco en mi diario. Me siento satisfecho con lo que
-                  he logrado y listo para enfrentar nuevos desafíos. ¡El
-                  aprendizaje continuo es clave para crecer profesionalmente!.
+                  {t("journal_list.today_entry.content")}
                 </Text>
                 <View style={styles.entryFooter}>
+                  <LinearGradient
+                    colors={ ratingColorsGradient[3].backgroundColor}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.starsGradientContainer}
+                  >
+                    <Text
+                      style={[
+                        styles.entryStars,
+                        { color: ratingColorsGradient[3].color },
+                      ]}
+                    >
+                      Stars: 3/5
+                    </Text>
+                  </LinearGradient>
                   <Feather name="chevron-right" size={19} color={textColor} />
                 </View>
               </LinearGradient>
@@ -320,9 +386,7 @@ export default function DiaryEntriesScreen() {
           </TouchableOpacity>
 
           {entries.map((item: Entry) => {
-            const ratingStyle = ratingColorsGradient[
-              (item.rating ?? 1) as 1 | 2 | 3 | 4 | 5
-            ] || {
+            const ratingStyle = ratingColorsGradient[item.rating ?? 1] || {
               backgroundColor: ["#E5E7EB", "#D1D5DB"],
               color: "#374151",
             };
@@ -366,7 +430,7 @@ export default function DiaryEntriesScreen() {
                     </Text>
                     <View style={[styles.entryFooter]}>
                       <LinearGradient
-                        colors={ratingStyle.backgroundColor as [string, string]} // Usa el gradiente del rating
+                        colors={ratingStyle.backgroundColor}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.starsGradientContainer}
@@ -555,19 +619,13 @@ const styles = StyleSheet.create({
   dayLabel: {
     fontSize: 14,
     fontWeight: "500",
-    color: "#000",
   },
+  dayLabelActive: {},
   dayIndicator: {
     width: 8,
     height: 8,
     borderRadius: 5,
     marginTop: 4,
-  },
-  dayIndicatorActive: {
-    backgroundColor: "blue",
-  },
-  dayIndicatorInactive: {
-    backgroundColor: "rgba(0,0,0,0.3)",
   },
   dayCellGradient: {
     width: "13%",

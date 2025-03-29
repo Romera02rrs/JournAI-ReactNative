@@ -1,7 +1,9 @@
-export const sampleEntries = [
+import { Entry } from "@/utils/types";
+
+export const sampleEntries: Entry[] = [
   {
-    id: "2023-03-22",
-    date: "2023-03-22",
+    id: "2025-03-26",
+    date: "2025-03-26",
     title: "Un día lleno de momentos especiales",
     rating: 5,
     content: `Me desperté temprano con el sonido de los pájaros en la ventana. Abrí las cortinas y el sol ya estaba brillando fuerte. Me preparé un desayuno completo con huevos, tostadas integrales, aguacate y una taza de café que disfruté lentamente mientras escuchaba música tranquila. 
@@ -19,31 +21,32 @@ export const sampleEntries = [
   La noche la dediqué a escribir este diario. Me siento agradecido por cada uno de los pequeños momentos del día, por haberme sentido presente y conectado conmigo mismo. Mañana quiero repetir varias de estas cosas que me hicieron sentir tan bien.`,
   },
   {
-    id: "2023-03-10",
+    id: "2025-03-24",
     rating: 1,
-    date: "2023-03-10",
+    date: "2025-03-24",
     title: "Hoy fue un gran día",
     content: `Fiumba, bueeenaaaas tardes, ¿cómo están? Espero que estén teniendo un día maravilloso. Hoy quiero compartir con ustedes un poco de lo que fue mi día, porque la verdad es que fue increíble. Empezó con un café delicioso y una caminata bajo el sol. Luego, tuve una reunión muy productiva en el trabajo donde cerramos un trato importante. Para celebrarlo, salí a cenar con amigos y disfrutamos de una noche llena de risas y buena compañía. ¡Definitivamente un día para recordar!`,
   },
   {
-    id: "2023-03-11",
+    id: "2025-03-25",
     rating: 1,
-    date: "2023-03-11",
+    date: "2025-03-25",
     title: "Día lluvioso",
     content:
       "Pasé el día leyendo y disfrutando de un café caliente mientras la lluvia caía. La tranquilidad del hogar era inigualable, así que aproveché para adelantar un libro que tenía pendiente. Además, preparé una sopa casera y encendí unas velas para crear un ambiente acogedor. Fue un día perfecto para recargar energías y disfrutar de la calma.",
   },
   {
-    id: "2023-03-12",
+    id: "2025-03-23",
     rating: 3,
-    date: "2023-03-12",
+    date: "2023-03-23",
     title: "Logros personales",
-    content: "Terminé un proyecto pendiente y me siento muy realizado. Después de semanas de esfuerzo, finalmente pude ver los resultados de mi trabajo. Para celebrarlo, me di un capricho y compré algo que quería desde hace tiempo. ¡La satisfacción de alcanzar una meta es incomparable!",
+    content:
+      "Terminé un proyecto pendiente y me siento muy realizado. Después de semanas de esfuerzo, finalmente pude ver los resultados de mi trabajo. Para celebrarlo, me di un capricho y compré algo que quería desde hace tiempo. ¡La satisfacción de alcanzar una meta es incomparable!",
   },
   {
-    id: "2023-03-13",
+    id: "2025-03-28",
     rating: 2,
-    date: "2023-03-13",
+    date: "2025-03-28",
     title: "Ejercicio matutino",
     content:
       "Salí a correr temprano y me llené de energía para el resto del día. El aire fresco de la mañana revitalizó mis sentidos y me preparó para enfrentar cualquier desafío. Después de correr, hice algunos estiramientos y disfruté de un desayuno saludable. ¡Empezar el día con actividad física es la mejor manera de mantenerse activo y positivo!",
@@ -53,14 +56,16 @@ export const sampleEntries = [
     rating: 5,
     date: "2023-03-14",
     title: "Noche de películas",
-    content: "Vi una película clásica y disfruté de unas palomitas en casa. Fue una noche perfecta para relajarse y desconectar del mundo exterior. La trama me atrapó desde el principio y me hizo reflexionar sobre varios aspectos de la vida. ¡Definitivamente una película que recomendaría a todos!",
+    content:
+      "Vi una película clásica y disfruté de unas palomitas en casa. Fue una noche perfecta para relajarse y desconectar del mundo exterior. La trama me atrapó desde el principio y me hizo reflexionar sobre varios aspectos de la vida. ¡Definitivamente una película que recomendaría a todos!",
   },
   {
     id: "2023-03-23",
     rating: 4,
     date: "2023-03-23",
     title: "Noche de películas",
-    content: "Vi una película clásica y disfruté de unas palomitas en casa. La película me hizo reflexionar sobre la vida y me inspiró a tomar decisiones importantes. Además, aproveché para escribir algunas ideas que surgieron mientras veía la película. ¡Una noche de cine puede ser muy productiva!",
+    content:
+      "Vi una película clásica y disfruté de unas palomitas en casa. La película me hizo reflexionar sobre la vida y me inspiró a tomar decisiones importantes. Además, aproveché para escribir algunas ideas que surgieron mientras veía la película. ¡Una noche de cine puede ser muy productiva!",
   },
   {
     id: "2023-03-15",
@@ -91,21 +96,24 @@ export const sampleEntries = [
     rating: 3,
     date: "2023-03-17",
     title: "Encuentro con amigos",
-    content: "Salí con mis amigos a un café y tuvimos una gran conversación. Es importante mantener estas conexiones y compartir momentos especiales con las personas que queremos. Además, aprovechamos para planear un viaje juntos y crear nuevos recuerdos. ¡La amistad es un tesoro que debemos cuidar!",
+    content:
+      "Salí con mis amigos a un café y tuvimos una gran conversación. Es importante mantener estas conexiones y compartir momentos especiales con las personas que queremos. Además, aprovechamos para planear un viaje juntos y crear nuevos recuerdos. ¡La amistad es un tesoro que debemos cuidar!",
   },
   {
     id: "2023-03-18",
     rating: 5,
     date: "2023-03-18",
     title: "Explorando un nuevo hobby",
-    content: "Me compré un set de acuarelas y pasé la tarde pintando. Descubrí una nueva forma de expresión y me sorprendió lo relajante que puede ser. Además, experimenté con diferentes técnicas y colores, creando obras únicas y originales. ¡Explorar nuevos hobbies es una excelente manera de descubrir talentos ocultos!",
+    content:
+      "Me compré un set de acuarelas y pasé la tarde pintando. Descubrí una nueva forma de expresión y me sorprendió lo relajante que puede ser. Además, experimenté con diferentes técnicas y colores, creando obras únicas y originales. ¡Explorar nuevos hobbies es una excelente manera de descubrir talentos ocultos!",
   },
   {
     id: "2023-03-19",
     rating: 5,
     date: "2023-03-19",
     title: "Día de descanso",
-    content: "Me dediqué a relajarme, dormir un poco más y ver series. El descanso es fundamental para recargar energías y afrontar la semana con optimismo. Además, aproveché para leer un libro que tenía pendiente y disfrutar de un baño relajante. ¡Cuidar de uno mismo es esencial para mantener el equilibrio!",
+    content:
+      "Me dediqué a relajarme, dormir un poco más y ver series. El descanso es fundamental para recargar energías y afrontar la semana con optimismo. Además, aproveché para leer un libro que tenía pendiente y disfrutar de un baño relajante. ¡Cuidar de uno mismo es esencial para mantener el equilibrio!",
   },
   {
     id: "2023-03-20",

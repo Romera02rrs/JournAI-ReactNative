@@ -12,6 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { Entry, GradientColors } from "@/utils/types";
 import {
   removeAllEntries,
   addExampleEntries,
@@ -49,19 +50,19 @@ export default function HomeScreen() {
 
   const formattedDate = today.toLocaleDateString(locale.language, options);
 
-  const gradients = {
+  const gradients: GradientColors = {
     entryCard:
       colorScheme === "dark"
-        ? (["#2e2a4d50", "#261b2eaa"] as [string, string])
-        : (["#e3f5fe", "#f1e3fb"] as [string, string]),
+        ? ["#342f5850", "#1f1625aa"]
+        : ["#e3f5fe", "#f1e3fb"],
     insight1:
       colorScheme === "dark"
-        ? (["#4b2e2e75", "#4a3c2a75"] as [string, string])
-        : (["#fdeaea", "#fef3e6"] as [string, string]),
+        ? ["#4b2e2e75", "#4a3c2a75"]
+        : ["#fdeaea", "#fef3e6"],
     insight2:
       colorScheme === "dark"
-        ? (["#192b2775", "#1a433675"] as [string, string])
-        : (["#e6fdf2", "#effae4"] as [string, string]),
+        ? ["#192b2775", "#1a433675"]
+        : ["#e6fdf2", "#effae4"],
   };
 
   const hour = today.getHours();
@@ -128,11 +129,13 @@ export default function HomeScreen() {
       </View>
       <LinearGradient
         colors={gradients.entryCard}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
         style={[styles.entryCard, { shadowColor: contrast }]}
       >
         <View style={styles.entryHeader}>
           <Feather name="sun" size={32} color="#f59e0b" />
-          <Text style={[styles.entryLabel, { color: '#6b7280' }]}>
+          <Text style={[styles.entryLabel, { color: "#6b7280" }]}>
             {t("entry.today")}
           </Text>
         </View>
@@ -193,40 +196,64 @@ export default function HomeScreen() {
           >
             {t("entry.recent")}
           </Text>
-          <TouchableOpacity style={styles.viewAll}>
-            <Text
-              style={[styles.viewAllText, { color: textColor }]}
-              onPress={() => router.push("/journal-list")}
-            >
-              {t("entry.view_all")}
-            </Text>
-            <Feather name="chevron-right" size={16} color={textColor} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.recentList}>
-          {recentEntries.map((entry, i) => (
-            <TouchableOpacity
-              key={i}
-              style={[
-                styles.recentCard,
-                { backgroundColor: entryColor, shadowColor: contrast },
-              ]}
-              onPress={() => {
-                router.push(`/journal-editor/${entry.id}`);
-              }}
-            >
-              <Text style={styles.recentDate}>
-                {new Date(entry.date).toLocaleDateString(
-                  i18n.language,
-                  options
-                )}
+          {recentEntries.length > 0 && (
+            <TouchableOpacity style={styles.viewAll}>
+              <Text
+                style={[styles.viewAllText, { color: textColor }]}
+                onPress={() => router.push("/journal-list")}
+              >
+                {t("entry.view_all")}
               </Text>
-              <Text style={[styles.recentTitle, { color: textColor }]}>
-                {entry.title}
+              <Feather name="chevron-right" size={16} color={textColor} />
+            </TouchableOpacity>
+          )}
+        </View>
+        {recentEntries.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Text style={[styles.emptyStateText, { color: textColor }]}>
+              {t("entry.no_recent_entries")}
+            </Text>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: entryBackgroundColor }]}
+              onPress={() => router.push(`/journal-editor/${getTodayId()}`)}
+            >
+              <Feather
+                name="plus"
+                size={16}
+                color={textColor}
+                style={{ marginRight: 8 }}
+              />
+              <Text style={[styles.buttonText, { color: textColor }]}>
+                {t("entry.add_first_entry")}
               </Text>
             </TouchableOpacity>
-          ))}
-        </View>
+          </View>
+        ) : (
+          <View style={styles.recentList}>
+            {recentEntries.map((entry, i) => (
+              <TouchableOpacity
+                key={i}
+                style={[
+                  styles.recentCard,
+                  { backgroundColor: entryColor, shadowColor: contrast },
+                ]}
+                onPress={() => {
+                  router.push(`/journal-editor/${entry.id}`);
+                }}
+              >
+                <Text style={styles.recentDate}>
+                  {new Date(entry.date).toLocaleDateString(
+                    i18n.language,
+                    options
+                  )}
+                </Text>
+                <Text style={[styles.recentTitle, { color: textColor }]}>
+                  {entry.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
       <View
         style={{ height: 3, backgroundColor: "#6e6e6e", marginVertical: 10 }}
@@ -241,18 +268,18 @@ export default function HomeScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.button, { backgroundColor: entryBackgroundColor }]}
-        onPress={() => addExampleEntries(sampleEntries)}
-      >
-        <Text style={[styles.buttonText, { color: textColor }]}>
-          Add entries
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: entryBackgroundColor }]}
         onPress={toggleLanguage}
       >
         <Text style={[styles.buttonText, { color: textColor }]}>
           Force language
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: entryBackgroundColor }]}
+        onPress={() => addExampleEntries(sampleEntries)}
+      >
+        <Text style={[styles.buttonText, { color: textColor }]}>
+          Add entries
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -400,5 +427,14 @@ const styles = StyleSheet.create({
   },
   recentTitle: {
     fontWeight: "500",
+  },
+  emptyState: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    marginBottom: 12,
   },
 });

@@ -24,6 +24,8 @@ export const resources = {
         write_today: "Write Today's entry",
         recent: "Recent Entries",
         view_all: "View all",
+        no_recent_entries: "Oops! No recent entries",
+        add_first_entry: "Add your first entry",
       },
       insights: {
         title: "Journal Insights",
@@ -31,11 +33,15 @@ export const resources = {
         total_entries: "Total entries",
       },
       journal_list: {
-        title: "Journal Entries",
+        title: "Your Daily Entries",
         caption: "Browse and search your past thoughts",
         week_entries: "This Week's Entries",
         days_completed: "Days completed",
         search_placeholder: "Search entries...",
+        today_entry: {
+          title: "Today's Entry",
+          content: "Take a moment to capture your thoughts, feelings, and experiences. Reflect on your day and write about it. What made you happy? What challenges did you face?",
+        }
       },
       week_day: {
         monday: "M",
@@ -71,6 +77,8 @@ export const resources = {
         write_today: "Escribir entrada de hoy",
         recent: "Entradas recientes",
         view_all: "Ver todas",
+        no_recent_entries: "Ups! No hay entradas recientes",
+        add_first_entry: "Agrega tu primera entrada",
       },
       insights: {
         title: "Entradas del diario",
@@ -78,11 +86,15 @@ export const resources = {
         total_entries: "Entradas totales",
       },
       journal_list: {
-        title: "Entradas del Diario", 
+        title: "Tus entradas diarias", 
         caption: "Explora y busca tus pensamientos pasados",
         week_entries: "Entradas de esta semana",
         search_placeholder: "Buscar entradas...",
         days_completed: "Días completados",
+        today_entry: {
+          title: "Entrada de hoy",
+          content: "Tómate un momento para capturar tus pensamientos, sentimientos y experiencias. Reflexiona sobre tu día y escribe sobre ello. ¿Qué te hizo feliz? ¿Qué desafíos enfrentaste?",
+        }
       },
       week_day: {
         monday: "L",

@@ -1,7 +1,8 @@
 // Opción de frase: know yourself, grow Every Day.
 // Precargar imagen del journal-list
-// aplicar el texto auto-saving... en el journal-edit
 // valorar el hacer efectos animados al cambiar de página
 // la imagen de la portada del journal-list pesa mucho
-// un calendario semanal debajo del buscador indicando los días completados a lo duolingo
-// La primera vez cuando entras a journal list y no hay nada, que salga un componente de añadir nueva entrada
+// Una pantalla de bloqueoç
+
+// Puedes escribir la entrada de diario de 3 días hacia atrás desde el día actual pero no hacia adelante y pasados los 3 días no puedes escribir
+// La entrada de hoy no puede renderizarse en la lista de entradas, ya sale en la portada
