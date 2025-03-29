@@ -85,6 +85,8 @@ const ParallaxScrollView = forwardRef<ParallaxScrollRef, Props>(
   }
 );
 
+ParallaxScrollView.displayName = 'ParallaxScrollView';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

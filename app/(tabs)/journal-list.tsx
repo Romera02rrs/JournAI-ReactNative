@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useMemo } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -58,7 +58,7 @@ export default function DiaryEntriesScreen() {
 
   let position = 0;
 
-  const today = new Date();
+  const today = useMemo(() => new Date(), []);
   const weekStart = startOfWeek(today, { weekStartsOn: 1 }); // Lunes
   const weekEnd = endOfWeek(today, { weekStartsOn: 1 }); // Domingo
 
@@ -193,7 +193,7 @@ export default function DiaryEntriesScreen() {
       return () => {
         isActive = false;
       };
-    }, [])
+    }, [today])
   );
 
   return (

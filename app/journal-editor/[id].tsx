@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useMemo } from "react";
 import {
   View,
   TextInput,
@@ -24,7 +24,7 @@ import {
 import { Entry, PanHandlerStateChangeEvent, Rating } from "@/utils/types";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { map, set } from "lodash";
+import { map } from "lodash";
 
 export default function NotesScreen() {
   const defaultImage = Image.resolveAssetSource(
@@ -80,11 +80,11 @@ export default function NotesScreen() {
       };
 
       fetchEntries();
-    }, [])
+    }, [defaultImage, id])
   );
 
-  const saveChanges = useCallback(
-    debounce(async (updatedField: Partial<Entry>) => {
+  const saveChanges = useMemo(() => {
+    return debounce(async (updatedField: Partial<Entry>) => {
       if (!id) return;
 
       setIsSaving(true); // Inicia el indicador de guardado
@@ -95,9 +95,8 @@ export default function NotesScreen() {
       });
 
       setIsSaving(false); // Detén el indicador de guardado
-    }, 500),
-    [id]
-  );
+    }, 500);
+  }, [id]);
 
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle);

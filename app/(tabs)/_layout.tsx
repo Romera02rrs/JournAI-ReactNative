@@ -56,7 +56,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="test"
+        name="old-list"
         options={{
           title: t("tabs.test"),
           tabBarIcon: ({ color }) => (

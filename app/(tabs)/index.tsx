@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
-  ScrollView,
   TouchableOpacity,
   StyleSheet,
   Image,
@@ -12,7 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { Entry, GradientColors } from "@/utils/types";
+import { GradientColors } from "@/utils/types";
 import {
   removeAllEntries,
   addExampleEntries,

@@ -11,7 +11,6 @@ import {
 import ParallaxScrollView, {
   ParallaxScrollRef,
 } from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { useThemeColor } from "@/hooks/useThemeColor";
@@ -30,13 +29,12 @@ import { Entry, ScrollEvent } from "@/utils/types";
 import { getTodayId } from "@/utils/functions/getTodayId";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function test() {
+export default function OldEntryList() {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [allEntries, setAllEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [textSearch, setTextSearch] = useState("");
 
-  const backgroundColor = useThemeColor({}, "background");
   const entryBackgroundColor = useThemeColor({}, "soft");
   const textColor = useThemeColor({}, "text");
 
