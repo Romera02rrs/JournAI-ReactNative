@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "JournAI",
+    "name": "20Day Journal",
     "slug": "JournAI",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.romera02.JournAI"
+      "package": "com.romera02.20dayjournal"
     },
     "web": {
       "bundler": "metro",
@@ -54,7 +54,7 @@
       }
     },
     "runtimeVersion": {
-      "policy": "appVersion"
+      "policy": "2.0.0"
     },
     "updates": {
       "url": "https://u.expo.dev/d1de4ea6-3a9e-4df5-8e2f-31af1ed5f200"
