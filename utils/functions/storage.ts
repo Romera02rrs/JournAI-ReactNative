@@ -199,6 +199,67 @@ export const removeAllEntries = async () => {
   }
 };
 
+
+/**
+ * Obtiene el número de días consecutivos con entradas
+ * @returns {Promise<number>} - Número de días consecutivos con entradas
+ */
+export const getStreakCount = async (): Promise<number> => {
+  const allEntries = await getAllEntries();
+
+  if (allEntries.length === 0) {
+    return 0; // No hay entradas
+  }
+
+  // Ordenar las entradas por fecha (más recientes primero)
+  const sortedEntries = allEntries.sort((a: Entry, b: Entry) => {
+    return new Date(b.id).getTime() - new Date(a.id).getTime();
+  });
+
+  let streakCount = 1; // Comienza con 1 porque la primera entrada cuenta
+  const today = new Date().toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
+
+  for (let i = 0; i < sortedEntries.length - 1; i++) {
+    const currentDate = new Date(sortedEntries[i].id);
+    const nextDate = new Date(sortedEntries[i + 1].id);
+
+    // Verificar si las fechas son consecutivas
+    const diffInDays = Math.floor(
+      (currentDate.getTime() - nextDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffInDays === 1) {
+      streakCount++; // Incrementar la racha si las fechas son consecutivas
+    } else {
+      break; // Rompe la racha si no son consecutivas
+    }
+  }
+
+  // Verificar si hay una entrada para hoy y sumarla a la racha
+  const hasEntryToday = sortedEntries.some(
+    (entry: Entry) => new Date(entry.id).toDateString() === new Date(today).toDateString()
+  );
+
+  if (!hasEntryToday) {
+    streakCount--; // Si no hay entrada hoy, resta 1 a la racha
+  }
+
+  return streakCount;
+};
+
+/**
+ * Verifica si hay una entrada escrita para el día actual
+ * @returns {Promise<boolean>} - True si hay una entrada para hoy, False en caso contrario
+ */
+export const checkIsTodayWritten = async (): Promise<boolean> => {
+  const allEntries = await getAllEntries();
+  const today = new Date().toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
+
+  return allEntries.some(
+    (entry: Entry) => new Date(entry.date || "").toDateString() === new Date(today).toDateString()
+  );
+};
+
 {/** Manejo de las imagenes */}
 
 /**

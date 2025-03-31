@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,8 @@ import {
   removeAllEntries,
   addExampleEntries,
   getRecentEntryes,
+  getStreakCount,
+  checkIsTodayWritten
 } from "@/utils/functions/storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { sampleEntries } from "@/utils/example_data/sampleEntries";
@@ -35,6 +37,23 @@ export default function HomeScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const today = new Date();
+
+  const [streakCount, setStreakCount] = useState<number>(0);
+  const [isTodayEntryWritten, setIsTodayEntryWritten] = useState<boolean>(false);
+
+  checkIsTodayWritten().then((isTodayWritten) => {
+    setIsTodayEntryWritten(isTodayWritten);
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchStreakCount = async () => {
+        const count = await getStreakCount();
+        setStreakCount(count);
+      };
+      fetchStreakCount();
+    }, [])
+  );
 
   const [recentEntries, setRecentEntries] = useState<
     { date: string; title: string; id: string }[]
@@ -169,9 +188,11 @@ export default function HomeScreen() {
             colors={gradients.insight1}
             style={styles.insightCard}
           >
-            <Text style={[styles.insightNumber, { color: textColor }]}>7</Text>
+            <Text style={[styles.insightNumber, { color: textColor }]}>
+              {streakCount}{isTodayEntryWritten ? "🔥" : "🧊"}
+            </Text>
             <Text style={[styles.insightLabel, { color: textColor }]}>
-              {t("insights.entries_this_week")}
+              {t("insights.streak_entries")}
             </Text>
           </LinearGradient>
           <LinearGradient

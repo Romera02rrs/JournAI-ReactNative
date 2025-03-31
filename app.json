@@ -9,14 +9,21 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.romera02.20dayjournal",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.romera02.20dayjournal"
+      "package": "com.romera02.20dayjournal",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -54,7 +61,7 @@
       }
     },
     "runtimeVersion": {
-      "policy": "2.0.0"
+      "policy": "appVersion"
     },
     "updates": {
       "url": "https://u.expo.dev/d1de4ea6-3a9e-4df5-8e2f-31af1ed5f200"

@@ -24,6 +24,7 @@ import {
   getAllEntries,
   getScrollPosition,
   saveScrollPosition,
+  checkIsTodayWritten,
 } from "@/utils/functions/storage";
 import { getTodayId } from "@/utils/functions/getTodayId";
 import {
@@ -172,10 +173,8 @@ export default function DiaryEntriesScreen() {
         });
         setAllEntries(sorted);
         setEntries(sorted);
-        const isTodayWritten = storedEntries.some(
-          (entry: Entry) =>
-            new Date(entry.date || "").toDateString() === today.toDateString()
-        );
+
+        const isTodayWritten = await checkIsTodayWritten();
         setIsTodayEntryWritten(isTodayWritten);
 
         hasLoadedEntriesOnce.current = true;
@@ -193,8 +192,12 @@ export default function DiaryEntriesScreen() {
       return () => {
         isActive = false;
       };
-    }, [today])
+    }, [])
   );
+
+  console.log("Is today entry written:", isTodayEntryWritten);
+  console.log("Today's date:", today);
+  
 
   return (
     <ParallaxScrollView
@@ -259,8 +262,11 @@ export default function DiaryEntriesScreen() {
         </View>
         <View style={styles.weekGrid}>
           {weekDays.map((day, index) => {
-            const hasEntry = completedDays.includes(index + 1);
-            const isToday = today.getDay() === index + 1;
+            // Ajusta el índice del domingo para que coincida con 0
+            const dayIndex = index === 6 ? 0 : index + 1;
+            
+            const hasEntry = completedDays.includes(dayIndex);
+            const isToday = today.getDay() === dayIndex;
 
             return hasEntry ? (
               <LinearGradient

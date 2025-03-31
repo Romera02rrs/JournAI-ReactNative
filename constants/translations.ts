@@ -29,6 +29,7 @@ export const resources = {
         title: "Journal Insights",
         entries_this_week: "Entries this week",
         total_entries: "Total entries",
+        streak_entries: "Streak of entries",
       },
       journal_list: {
         title: "Your Daily Entries",
@@ -82,6 +83,7 @@ export const resources = {
         title: "Entradas del diario",
         entries_this_week: "Entradas esta semana",
         total_entries: "Entradas totales",
+        streak_entries: "Racha de entradas",
       },
       journal_list: {
         title: "Tus entradas diarias", 

@@ -27,6 +27,20 @@ export const sampleEntries: Entry[] = [
     title: "Hoy fue un gran día",
     content: `Fiumba, bueeenaaaas tardes, ¿cómo están? Espero que estén teniendo un día maravilloso. Hoy quiero compartir con ustedes un poco de lo que fue mi día, porque la verdad es que fue increíble. Empezó con un café delicioso y una caminata bajo el sol. Luego, tuve una reunión muy productiva en el trabajo donde cerramos un trato importante. Para celebrarlo, salí a cenar con amigos y disfrutamos de una noche llena de risas y buena compañía. ¡Definitivamente un día para recordar!`,
   },
+  // {
+  //   id: "2025-03-30",
+  //   rating: 1,
+  //   date: "2025-03-30",
+  //   title: "Domingo perfecto",
+  //   content: `Hoy es domingo, y la verdad es que me siento muy bien. Me desperté temprano y aproveché para hacer un poco de ejercicio en casa. Luego, preparé un desayuno saludable y me senté a leer un libro que tenía pendiente. Pasé la tarde organizando algunas cosas en casa y disfrutando de la tranquilidad del día. Para cerrar el fin de semana, vi una película que me recomendó un amigo y me encantó. ¡Un domingo perfecto!`,
+  // },
+  {
+    id: "2025-03-29",
+    rating: 1,
+    date: "2025-03-29",
+    title: "Domingo perfecto",
+    content: `Hoy es domingo, y la verdad es que me siento muy bien. Me desperté temprano y aproveché para hacer un poco de ejercicio en casa. Luego, preparé un desayuno saludable y me senté a leer un libro que tenía pendiente. Pasé la tarde organizando algunas cosas en casa y disfrutando de la tranquilidad del día. Para cerrar el fin de semana, vi una película que me recomendó un amigo y me encantó. ¡Un domingo perfecto!`,
+  },
   {
     id: "2025-03-25",
     rating: 1,
