@@ -11,11 +11,15 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
+import locale from "@/i18n";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -27,8 +31,13 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
+  if (!loaded || !i18n.isInitialized) {
     return null;
+  } else {
+    console.log(t("traductions_loaded"));
+    console.log("i18n initialized", i18n.isInitialized);
+    console.log("locale", locale);
+    console.log("i18n", i18n.language);
   }
 
   return (
