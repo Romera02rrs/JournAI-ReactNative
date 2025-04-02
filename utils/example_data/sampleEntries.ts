@@ -1,31 +1,54 @@
 import { Entry } from "@/utils/types";
 
 export const sampleEntries: Entry[] = [
+  // {
+  //   id: "2025-04-06",
+  //   rating: 1,
+  //   date: "2025-04-06",
+  //   title: "Domingo",
+  //   content: `Domingo`,
+  // },
+  // {
+  //   id: "2025-04-05",
+  //   rating: 1,
+  //   date: "2025-04-05",
+  //   title: "Sábado",
+  //   content: `Sábado`,
+  // },
+  // {
+  //   id: "2025-04-04",
+  //   rating: 1,
+  //   date: "2025-04-04",
+  //   title: "Viernes",
+  //   content: `Viernes`,
+  // },
+  // {
+  //   id: "2025-04-03",
+  //   rating: 1,
+  //   date: "2025-04-03",
+  //   title: "Jueves",
+  //   content: `Jueves`,
+  // },
+  // {
+  //   id: "2025-04-02",
+  //   rating: 1,
+  //   date: "2025-04-02",
+  //   title: "Miércoles",
+  //   content: `Miércoles`,
+  // },
+  // {
+  //   id: "2025-04-01",
+  //   rating: 1,
+  //   date: "2025-04-01",
+  //   title: "Martes",
+  //   content: `Martes`,
+  // },
   {
-    id: "2025-03-26",
-    date: "2025-03-26",
-    title: "Un día lleno de momentos especiales",
-    rating: 5,
-    content: `Me desperté temprano con el sonido de los pájaros en la ventana. Abrí las cortinas y el sol ya estaba brillando fuerte. Me preparé un desayuno completo con huevos, tostadas integrales, aguacate y una taza de café que disfruté lentamente mientras escuchaba música tranquila. 
-  
-  Después de desayunar, salí a dar una caminata por el parque cercano. Estaba lleno de vida: personas corriendo, perros jugando, niños en bicicleta. Me senté un rato bajo un árbol a escribir algunas ideas que tenía en mente para un nuevo proyecto personal. Me sentí inspirado y en paz.
-  
-  Al volver a casa, dediqué un par de horas a trabajar. Organicé mis tareas del día, respondí algunos correos importantes y avancé en una presentación que debo entregar la próxima semana. Sentí que pude concentrarme muy bien y fue uno de esos días en los que todo fluye.
-  
-  A mediodía, preparé un almuerzo sencillo pero delicioso: arroz con verduras salteadas y tofu. Después, me tomé un pequeño descanso viendo un capítulo de una serie que estoy siguiendo últimamente. La historia se está poniendo muy buena y me dejó pensando en los giros que puede tomar.
-  
-  Por la tarde decidí enfocarme en mí. Practiqué meditación durante 20 minutos, hice algunos estiramientos y escuché un podcast sobre crecimiento personal que me dejó reflexionando sobre la importancia de la gratitud en la vida diaria.
-  
-  Al atardecer, salí nuevamente, esta vez con mi bicicleta. Hice un recorrido más largo de lo habitual, disfrutando del cielo que se iba tiñendo de tonos naranjas y rosados. Al regresar, me di una ducha caliente y cené ligero: una sopa de lentejas y pan integral.
-  
-  La noche la dediqué a escribir este diario. Me siento agradecido por cada uno de los pequeños momentos del día, por haberme sentido presente y conectado conmigo mismo. Mañana quiero repetir varias de estas cosas que me hicieron sentir tan bien.`,
-  },
-  {
-    id: "2025-03-24",
+    id: "2025-03-31",
     rating: 1,
-    date: "2025-03-24",
-    title: "Hoy fue un gran día",
-    content: `Fiumba, bueeenaaaas tardes, ¿cómo están? Espero que estén teniendo un día maravilloso. Hoy quiero compartir con ustedes un poco de lo que fue mi día, porque la verdad es que fue increíble. Empezó con un café delicioso y una caminata bajo el sol. Luego, tuve una reunión muy productiva en el trabajo donde cerramos un trato importante. Para celebrarlo, salí a cenar con amigos y disfrutamos de una noche llena de risas y buena compañía. ¡Definitivamente un día para recordar!`,
+    date: "2025-03-31",
+    title: "Lunes",
+    content: `Lunes`,
   },
   // {
   //   id: "2025-03-30",
@@ -144,5 +167,31 @@ export const sampleEntries: Entry[] = [
     title: "Paseo en bicicleta",
     content:
       "Salí a dar una vuelta en bicicleta por la ciudad y disfruté del buen clima. El ejercicio al aire libre siempre me revitaliza y me permite conectar con la naturaleza. Además, descubrí nuevos rincones de la ciudad que no conocía. ¡Explorar el entorno en bicicleta es una forma divertida de mantenerse activo!",
+  },
+  {
+    id: "2025-03-26",
+    date: "2025-03-26",
+    title: "Un día lleno de momentos especiales",
+    rating: 5,
+    content: `Me desperté temprano con el sonido de los pájaros en la ventana. Abrí las cortinas y el sol ya estaba brillando fuerte. Me preparé un desayuno completo con huevos, tostadas integrales, aguacate y una taza de café que disfruté lentamente mientras escuchaba música tranquila. 
+  
+  Después de desayunar, salí a dar una caminata por el parque cercano. Estaba lleno de vida: personas corriendo, perros jugando, niños en bicicleta. Me senté un rato bajo un árbol a escribir algunas ideas que tenía en mente para un nuevo proyecto personal. Me sentí inspirado y en paz.
+  
+  Al volver a casa, dediqué un par de horas a trabajar. Organicé mis tareas del día, respondí algunos correos importantes y avancé en una presentación que debo entregar la próxima semana. Sentí que pude concentrarme muy bien y fue uno de esos días en los que todo fluye.
+  
+  A mediodía, preparé un almuerzo sencillo pero delicioso: arroz con verduras salteadas y tofu. Después, me tomé un pequeño descanso viendo un capítulo de una serie que estoy siguiendo últimamente. La historia se está poniendo muy buena y me dejó pensando en los giros que puede tomar.
+  
+  Por la tarde decidí enfocarme en mí. Practiqué meditación durante 20 minutos, hice algunos estiramientos y escuché un podcast sobre crecimiento personal que me dejó reflexionando sobre la importancia de la gratitud en la vida diaria.
+  
+  Al atardecer, salí nuevamente, esta vez con mi bicicleta. Hice un recorrido más largo de lo habitual, disfrutando del cielo que se iba tiñendo de tonos naranjas y rosados. Al regresar, me di una ducha caliente y cené ligero: una sopa de lentejas y pan integral.
+  
+  La noche la dediqué a escribir este diario. Me siento agradecido por cada uno de los pequeños momentos del día, por haberme sentido presente y conectado conmigo mismo. Mañana quiero repetir varias de estas cosas que me hicieron sentir tan bien.`,
+  },
+  {
+    id: "2025-03-24",
+    rating: 1,
+    date: "2025-03-24",
+    title: "Hoy fue un gran día",
+    content: `Fiumba, bueeenaaaas tardes, ¿cómo están? Espero que estén teniendo un día maravilloso. Hoy quiero compartir con ustedes un poco de lo que fue mi día, porque la verdad es que fue increíble. Empezó con un café delicioso y una caminata bajo el sol. Luego, tuve una reunión muy productiva en el trabajo donde cerramos un trato importante. Para celebrarlo, salí a cenar con amigos y disfrutamos de una noche llena de risas y buena compañía. ¡Definitivamente un día para recordar!`,
   },
 ];

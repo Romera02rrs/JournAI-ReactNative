@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "20Day Journal",
+    "name": "20Day_Journal",
     "slug": "JournAI",
     "version": "2.0.0",
     "orientation": "portrait",
@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.romera02.20dayjournal",
+      "bundleIdentifier": "com.romera02.dayjournal",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.romera02.20dayjournal",
+      "package": "com.romera02.dayjournal",
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ]

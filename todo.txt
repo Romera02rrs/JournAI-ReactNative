@@ -2,7 +2,9 @@
 // Precargar imagen del journal-list
 // valorar el hacer efectos animados al cambiar de página
 // la imagen de la portada del journal-list pesa mucho
-// Una pantalla de bloqueoç
+// Una pantalla de bloqueo
 
 // Puedes escribir la entrada de diario de 3 días hacia atrás desde el día actual pero no hacia adelante y pasados los 3 días no puedes escribir
 // La entrada de hoy no puede renderizarse en la lista de entradas, ya sale en la portada
+
+// Ajustar entradas totales 24/30

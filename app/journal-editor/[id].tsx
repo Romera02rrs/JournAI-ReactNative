@@ -24,6 +24,7 @@ import {
 import { Entry, PanHandlerStateChangeEvent, Rating } from "@/utils/types";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { IconSymbol } from "@/components/ui/IconSymbol";
+import { getTodayId } from "@/utils/functions/getTodayId";
 import { map } from "lodash";
 
 export default function NotesScreen() {
@@ -31,10 +32,13 @@ export default function NotesScreen() {
     require("@/assets/images/entry_default_cover_min.webp")
   ).uri;
 
-  const { id } = useLocalSearchParams();
+  const { id: routeId } = useLocalSearchParams();
+  const id = useMemo(() => {
+    return routeId || getTodayId();
+  }, [routeId]);
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
+  const [date] = useState("");
   const [image, setImage] = useState(defaultImage);
   const [rating, setRating] = useState<number>(0);
   const ratings: Rating[] = [1, 2, 3, 4, 5];
@@ -72,7 +76,6 @@ export default function NotesScreen() {
         if (entry) {
           setText(entry.content || "");
           setTitle(entry.title || "");
-          setDate(entry.date || "");
           setRating(entry.rating || 0);
           setImage(entry.imageUri || defaultImage);
         }
@@ -129,6 +132,7 @@ export default function NotesScreen() {
 
     const entry: Entry = {
       id: Array.isArray(id) ? id[0] : id,
+      date: Array.isArray(id) ? id[0] : id,
       title,
       content: text,
       imageUri: newImageUri,

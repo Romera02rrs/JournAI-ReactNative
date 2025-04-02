@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { Entry } from '@/utils/types';
+import { getTodayId } from '@/utils/functions/getTodayId';
+import { getDay } from "@/utils/functions/getDay";
 
 const SCROLL_POSITION_KEY = 'diary_scroll_position';
 const ENTRIES_DIRTY_KEY = "entries_dirty";
@@ -97,8 +99,14 @@ export const updateEntry = async (updatedEntry: Partial<Entry> & { id: string })
       };
       console.log('Entrada actualizada con éxito');
     } else {
-      console.warn('No se encontró la entrada, se agregará una nueva entrada:', updatedEntry);
-      entries.push(updatedEntry as Entry);
+      
+      const newEntry: Entry = {
+        ...updatedEntry,
+        date: updatedEntry.date || updatedEntry.id,
+      } as Entry;
+
+      console.warn('No se encontró la entrada, se agregará una nueva entrada:', newEntry);
+      entries.push(newEntry);
     }
 
     await AsyncStorage.setItem('journal_entries', JSON.stringify(entries));
@@ -199,53 +207,54 @@ export const removeAllEntries = async () => {
   }
 };
 
-
 /**
  * Obtiene el número de días consecutivos con entradas
  * @returns {Promise<number>} - Número de días consecutivos con entradas
  */
 export const getStreakCount = async (): Promise<number> => {
-  const allEntries = await getAllEntries();
+  const allEntries: Entry[] = await getAllEntries();
+  const MS_IN_DAY = 1000 * 60 * 60 * 24;
 
-  if (allEntries.length === 0) {
-    return 0; // No hay entradas
-  }
+  if (allEntries.length === 0) return 0;
 
-  // Ordenar las entradas por fecha (más recientes primero)
-  const sortedEntries = allEntries.sort((a: Entry, b: Entry) => {
-    return new Date(b.id).getTime() - new Date(a.id).getTime();
-  });
-
-  let streakCount = 1; // Comienza con 1 porque la primera entrada cuenta
-  const today = new Date().toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
-
-  for (let i = 0; i < sortedEntries.length - 1; i++) {
-    const currentDate = new Date(sortedEntries[i].id);
-    const nextDate = new Date(sortedEntries[i + 1].id);
-
-    // Verificar si las fechas son consecutivas
-    const diffInDays = Math.floor(
-      (currentDate.getTime() - nextDate.getTime()) / (1000 * 60 * 60 * 24)
-    );
-
-    if (diffInDays === 1) {
-      streakCount++; // Incrementar la racha si las fechas son consecutivas
-    } else {
-      break; // Rompe la racha si no son consecutivas
-    }
-  }
-
-  // Verificar si hay una entrada para hoy y sumarla a la racha
-  const hasEntryToday = sortedEntries.some(
-    (entry: Entry) => new Date(entry.id).toDateString() === new Date(today).toDateString()
+  // Ordenar entradas por fecha descendente (más recientes primero)
+  const sortedEntries = allEntries.sort(
+    (a, b) => new Date(b.id).getTime() - new Date(a.id).getTime()
   );
 
-  if (!hasEntryToday) {
-    streakCount--; // Si no hay entrada hoy, resta 1 a la racha
+  let streakCount = 0;
+  let currentDate = new Date();
+  currentDate.setUTCHours(0, 0, 0, 0);
+
+  console.log("Días considerados parte de la racha:");
+
+  for (let entry of sortedEntries) {
+    const entryDate = new Date(entry.id);
+    entryDate.setUTCHours(0, 0, 0, 0);
+
+    const diffInDays = Math.floor(
+      (currentDate.getTime() - entryDate.getTime()) / MS_IN_DAY
+    );
+
+    if (diffInDays === 0) {
+      // Entrada del día actual
+      streakCount++;
+      console.log(`Día: ${entry.id}`);
+      currentDate = entryDate;
+    } else if (diffInDays === 1) {
+      // Entrada del día anterior inmediato
+      streakCount++;
+      console.log(`Día: ${entry.id}`);
+      currentDate = entryDate;
+    } else {
+      // Si hay un salto mayor de un día, se rompe la racha
+      break;
+    }
   }
 
   return streakCount;
 };
+
 
 /**
  * Verifica si hay una entrada escrita para el día actual
@@ -253,7 +262,7 @@ export const getStreakCount = async (): Promise<number> => {
  */
 export const checkIsTodayWritten = async (): Promise<boolean> => {
   const allEntries = await getAllEntries();
-  const today = new Date().toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
+  const today = getTodayId(); // Fecha actual en formato YYYY-MM-DD
 
   return allEntries.some(
     (entry: Entry) => new Date(entry.date || "").toDateString() === new Date(today).toDateString()

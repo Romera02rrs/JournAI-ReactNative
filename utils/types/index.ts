@@ -2,7 +2,7 @@ export type Rating = 1 | 2 | 3 | 4 | 5;
 
 export interface Entry {
   id: string;
-  date?: string;
+  date: string;
   title?: string;
   content?: string;
   imageUri?: string;
