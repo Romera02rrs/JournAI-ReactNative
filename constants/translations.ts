@@ -24,6 +24,7 @@ export const resources = {
         view_all: "View all",
         no_recent_entries: "Oops! No recent entries",
         add_first_entry: "Add your first entry",
+        no_entry_title: "No entry title",
       },
       insights: {
         title: "Journal Insights",
@@ -38,8 +39,11 @@ export const resources = {
         days_completed: "Days completed",
         search_placeholder: "Search entries...",
         today_entry: {
-          title: "Today's Entry",
+          title: "Add Today's Entry",
           content: "Take a moment to capture your thoughts, feelings, and experiences. Reflect on your day and write about it. What made you happy? What challenges did you face?",
+          today_no_title: "There is no title for your today's entry",
+          today_no_content: "There is no content in your today's entry, write something about your day, take a moment to reflect on your thoughts, feelings, and experiences.",
+          today_no_rating: "No rating",
         }
       },
       week_day: {
@@ -78,6 +82,7 @@ export const resources = {
         view_all: "Ver todas",
         no_recent_entries: "Ups! No hay entradas recientes",
         add_first_entry: "Agrega tu primera entrada",
+        no_entry_title: "Enrada sin título",
       },
       insights: {
         title: "Entradas del diario",
@@ -94,6 +99,9 @@ export const resources = {
         today_entry: {
           title: "Entrada de hoy",
           content: "Tómate un momento para capturar tus pensamientos, sentimientos y experiencias. Reflexiona sobre tu día y escribe sobre ello. ¿Qué te hizo feliz? ¿Qué desafíos enfrentaste?",
+          today_no_title: "No hay título para tu entrada de hoy",
+          today_no_content: "¡No hay contenido en tu entrada de hoy! escribe algo sobre tu día, tómate un momento para reflexionar sobre tus pensamientos, sentimientos y experiencias.",
+          today_no_rating: "Sin puntuación",
         }
       },
       week_day: {

@@ -25,6 +25,7 @@ import {
   getScrollPosition,
   saveScrollPosition,
   checkIsTodayWritten,
+  getTodayEntry,
 } from "@/utils/functions/storage";
 import { getTodayId } from "@/utils/functions/getTodayId";
 import {
@@ -44,6 +45,7 @@ export default function DiaryEntriesScreen() {
   const [loading, setLoading] = useState(true);
   const [textSearch, setTextSearch] = useState("");
   const [isTodayEntryWritten, setIsTodayEntryWritten] = useState(false);
+  const [todayEntry, setTodayEntry] = useState<Entry | null>(null);
 
   const entryBackgroundColor = useThemeColor({}, "soft");
   const contrast = useThemeColor({}, "contrast");
@@ -101,8 +103,8 @@ export default function DiaryEntriesScreen() {
         : ["#e3f5fe", "#f1e3fb"],
     red:
       colorScheme === "dark"
-      ? ["#3a1e1e80", "#3a2f1eaa"]
-      : ["#f8d6d6", "#fff1daba"],
+        ? ["#3a1e1e80", "#3a2f1eaa"]
+        : ["#f8d6d6", "#fff1daba"],
     orange:
       colorScheme === "dark"
         ? ["#b92a2cd0", "#a55d0094"]
@@ -177,6 +179,13 @@ export default function DiaryEntriesScreen() {
         const isTodayWritten = await checkIsTodayWritten();
         setIsTodayEntryWritten(isTodayWritten);
 
+        if (isTodayWritten) {
+          const entry = await getTodayEntry();
+          setTodayEntry(entry);
+        } else {
+          setTodayEntry(null);
+        }
+
         hasLoadedEntriesOnce.current = true;
         setLoading(false);
         await clearEntriesDirtyFlag();
@@ -196,8 +205,7 @@ export default function DiaryEntriesScreen() {
   );
 
   console.log("Is today entry written:", isTodayEntryWritten);
-  console.log("Today's date:", today);
-  
+  console.log("Today's entry:", todayEntry);
 
   return (
     <ParallaxScrollView
@@ -234,7 +242,7 @@ export default function DiaryEntriesScreen() {
           <TextInput
             ref={searchInputRef}
             placeholder={t("journal_list.search_placeholder")}
-            style={styles.searchInput}
+            style={[styles.searchInput, { color: textColor }]}
             placeholderTextColor={textColor}
             value={textSearch}
             onChangeText={handleTextSearch}
@@ -264,7 +272,7 @@ export default function DiaryEntriesScreen() {
           {weekDays.map((day, index) => {
             // Ajusta el índice del domingo para que coincida con 0
             const dayIndex = index === 6 ? 0 : index + 1;
-            
+
             const hasEntry = completedDays.includes(dayIndex);
             const isToday = today.getDay() === dayIndex;
 
@@ -343,7 +351,7 @@ export default function DiaryEntriesScreen() {
               ]}
             >
               <LinearGradient
-                colors={isTodayEntryWritten ? gradients.purlple : gradients.red }
+                colors={isTodayEntryWritten ? gradients.purlple : gradients.red}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={[
@@ -361,30 +369,55 @@ export default function DiaryEntriesScreen() {
                     { color: textColor, fontSize: 21 },
                   ]}
                 >
-                  {t("journal_list.today_entry.title")}
+                  {isTodayEntryWritten
+                    ? todayEntry?.title === "" ||
+                      todayEntry?.title === undefined
+                      ? t("journal_list.today_entry.today_no_title")
+                      : todayEntry?.title
+                    : t("journal_list.today_entry.title")}
                 </Text>
                 <Text
                   style={[styles.entryContent, { fontSize: 14.5 }]}
                   numberOfLines={2}
                 >
-                  {t("journal_list.today_entry.content")}
+                  {isTodayEntryWritten
+                    ? todayEntry?.content === "" ||
+                      todayEntry?.content === undefined
+                      ? t("journal_list.today_entry.today_no_content")
+                      : todayEntry?.content
+                    : t("journal_list.today_entry.content")}
                 </Text>
                 <View style={styles.entryFooter}>
-                  <LinearGradient
-                    colors={ ratingColorsGradient[3].backgroundColor}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.starsGradientContainer}
-                  >
-                    <Text
-                      style={[
-                        styles.entryStars,
-                        { color: ratingColorsGradient[3].color },
-                      ]}
+                  {isTodayEntryWritten &&
+                  todayEntry &&
+                  (todayEntry.rating ?? 0) > 0 ? (
+                    <LinearGradient
+                      colors={
+                        ratingColorsGradient[todayEntry.rating ?? 1]
+                          .backgroundColor
+                      }
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.starsGradientContainer}
                     >
-                      Stars: 3/5
+                      <Text
+                        style={[
+                          styles.entryStars,
+                          {
+                            color:
+                              ratingColorsGradient[todayEntry.rating ?? 1]
+                                .color,
+                          },
+                        ]}
+                      >
+                        Stars: {todayEntry.rating}/5
+                      </Text>
+                    </LinearGradient>
+                  ) : (
+                    <Text style={styles.TodayNoRating}>
+                      {t("journal_list.today_entry.today_no_rating")}
                     </Text>
-                  </LinearGradient>
+                  )}
                   <Feather name="chevron-right" size={19} color={textColor} />
                 </View>
               </LinearGradient>
@@ -392,6 +425,9 @@ export default function DiaryEntriesScreen() {
           </TouchableOpacity>
 
           {entries.map((item: Entry) => {
+
+            if (item.id === getTodayId()) return null; // Skip today's entry
+
             const ratingStyle = ratingColorsGradient[item.rating ?? 1] || {
               backgroundColor: ["#E5E7EB", "#D1D5DB"],
               color: "#374151",
@@ -451,7 +487,7 @@ export default function DiaryEntriesScreen() {
                         </Text>
                       </LinearGradient>
                       <Feather
-                        name="chevron-right"
+                        name="lock"
                         size={16}
                         color={textColor}
                       />
@@ -577,6 +613,13 @@ const styles = StyleSheet.create({
   },
   todayEntry: {
     borderWidth: 0,
+  },
+  TodayNoRating: {
+    fontSize: 12,
+    color: "#6b7280",
+    borderRadius: 5,
+    padding: 4,
+    backgroundColor: "rgba(0,0,0,0.2)",
   },
 
   // Semana

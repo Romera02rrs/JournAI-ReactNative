@@ -167,6 +167,15 @@ export const getAllEntries = async () => {
 };
 
 /**
+ * 
+ * @returns {number} -El número total de entradas almacenadas
+ */
+export const getTotalNumberOfEntries = async () => {
+  const allEntries = await getAllEntries();
+  return allEntries.length;
+}
+
+/**
  * Obtiene las ultimas 3 entradas almacenadas
  */
 export const getRecentEntryes = async () => {
@@ -267,6 +276,20 @@ export const checkIsTodayWritten = async (): Promise<boolean> => {
   return allEntries.some(
     (entry: Entry) => new Date(entry.date || "").toDateString() === new Date(today).toDateString()
   );
+};
+
+/**
+ * Obtiene la entrada del día actual si está escrita
+ * @returns {Promise<Entry | null>} - La entrada del día actual o null si no existe
+ */
+export const getTodayEntry = async (): Promise<Entry | null> => {
+  const allEntries = await getAllEntries();
+  const today = getTodayId(); // Fecha actual en formato YYYY-MM-DD
+
+  // Buscar la entrada del día actual
+  const todayEntry = allEntries.find((entry: Entry) => entry.id === today);
+
+  return todayEntry || null; // Devuelve la entrada o null si no existe
 };
 
 {/** Manejo de las imagenes */}

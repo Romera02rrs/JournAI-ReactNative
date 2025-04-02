@@ -17,7 +17,8 @@ import {
   addExampleEntries,
   getRecentEntryes,
   getStreakCount,
-  checkIsTodayWritten
+  checkIsTodayWritten,
+  getTotalNumberOfEntries,
 } from "@/utils/functions/storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { sampleEntries } from "@/utils/example_data/sampleEntries";
@@ -39,7 +40,9 @@ export default function HomeScreen() {
   const today = new Date();
 
   const [streakCount, setStreakCount] = useState<number>(0);
-  const [isTodayEntryWritten, setIsTodayEntryWritten] = useState<boolean>(false);
+  const [totalNumberOfEntries, setTotalNumberOfEntries] = useState<number>(0);
+  const [isTodayEntryWritten, setIsTodayEntryWritten] =
+    useState<boolean>(false);
 
   checkIsTodayWritten().then((isTodayWritten) => {
     setIsTodayEntryWritten(isTodayWritten);
@@ -47,11 +50,14 @@ export default function HomeScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      const fetchStreakCount = async () => {
+      const fetchData = async () => {
         const count = await getStreakCount();
         setStreakCount(count);
+
+        const totalEntries = await getTotalNumberOfEntries();
+        setTotalNumberOfEntries(totalEntries);
       };
-      fetchStreakCount();
+      fetchData();
     }, [])
   );
 
@@ -189,7 +195,8 @@ export default function HomeScreen() {
             style={styles.insightCard}
           >
             <Text style={[styles.insightNumber, { color: textColor }]}>
-              {streakCount}{isTodayEntryWritten ? "🔥" : "🧊"}
+              {streakCount}
+              {isTodayEntryWritten ? "🔥" : "🧊"}
             </Text>
             <Text style={[styles.insightLabel, { color: textColor }]}>
               {t("insights.streak_entries")}
@@ -200,7 +207,7 @@ export default function HomeScreen() {
             style={styles.insightCard}
           >
             <Text style={[styles.insightNumber, { color: textColor }]}>
-              24 / <Text>30</Text>
+              {totalNumberOfEntries} / <Text>30</Text>
             </Text>
             <Text style={styles.insightLabel}>
               {t("insights.total_entries")}
@@ -268,7 +275,9 @@ export default function HomeScreen() {
                   )}
                 </Text>
                 <Text style={[styles.recentTitle, { color: textColor }]}>
-                  {entry.title}
+                  {entry?.title === "" || entry?.title === undefined
+                    ? t("entry.no_entry_title")
+                    : entry.title}
                 </Text>
               </TouchableOpacity>
             ))}

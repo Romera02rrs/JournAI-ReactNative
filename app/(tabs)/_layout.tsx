@@ -38,7 +38,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="journal-list"
+        name="journal-list/index"
         options={{
           title: t("tabs.journal"),
           tabBarIcon: ({ color }) => (
