@@ -3,7 +3,6 @@ import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { Entry } from '@/utils/types';
 import { getTodayId } from '@/utils/functions/getTodayId';
-import { getDay } from "@/utils/functions/getDay";
 
 const SCROLL_POSITION_KEY = 'diary_scroll_position';
 const ENTRIES_DIRTY_KEY = "entries_dirty";
@@ -14,7 +13,7 @@ export const markEntriesAsDirty = async () => {
 
 {/** Manejo del dirty */}
 
-/**
+/**t
  * Limpia la marca de suciedad de las entradas
  */
 export const clearEntriesDirtyFlag = async () => {

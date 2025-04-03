@@ -8,6 +8,7 @@ import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { useTranslation } from "react-i18next";
+import { Brain } from "lucide-react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -32,7 +33,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: t("tabs.home"),
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <IconSymbol size={29} name="house" color={color} />
           ),
         }}
@@ -43,6 +44,15 @@ export default function TabLayout() {
           title: t("tabs.journal"),
           tabBarIcon: ({ color }) => (
             <IconSymbol size={29} name="book" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="psych-analysis"
+        options={{
+          title: t("tabs.analysis"),
+          tabBarIcon: ({ color }) => (
+            <Brain strokeWidth={1.8} size={25} color={color} />
           ),
         }}
       />

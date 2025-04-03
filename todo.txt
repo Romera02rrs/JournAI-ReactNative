@@ -8,3 +8,4 @@
   // Yesterday's entry
   // Entry from 2 days ago
 // Funcionalidad para cambiar el fondo de pantalla en ajustes y el lenguaje 
+// Arreglar titulo de journal-edit, se ha subido

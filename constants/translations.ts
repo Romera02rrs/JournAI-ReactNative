@@ -12,6 +12,7 @@ export const resources = {
         explore: "Explore",
         settings: "Settings",
         test: "Test",
+        analysis: "Analysis",
       },
       entry: {
         entry: "Entry",
@@ -70,6 +71,7 @@ export const resources = {
         explore: "Explorar",
         settings: "Configuración",
         test: "Prueba",
+        analysis: "Análisis",
       },
       entry: {
         entry: "Entrada",
