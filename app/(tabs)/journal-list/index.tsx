@@ -191,13 +191,15 @@ export default function DiaryEntriesScreen() {
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={<Image source={coverImage} style={styles.coverImage} />}
     >
-      <View style={styles.header}>
+      
+      <View style={[styles.section, { marginBottom: 21 }]}>
         <Text style={[styles.greeting, { color: textColor }]}>
           {t("journal_list.title")}
         </Text>
         <Text style={styles.date}>{t("journal_list.caption")}</Text>
       </View>
-      <View style={styles.dateSearchContainer}>
+
+      <View style={[styles.dateSearchContainer, styles.section]}>
         <View
           style={[
             styles.searchContainer,
@@ -408,15 +410,14 @@ const styles = StyleSheet.create({
     width: "100%",
     objectFit: "cover",
   },
-  header: {
-    marginBottom: 16,
+  section: {
+    marginBottom: 24,
   },
   greeting: {
     fontSize: 28,
     fontWeight: "bold",
   },
   date: {
-    marginTop: 12,
     fontSize: 16,
     color: "#6b7280",
   },
@@ -451,7 +452,6 @@ const styles = StyleSheet.create({
 
   // Lista de entradas
   listContent: {
-    marginTop: 20,
     paddingBottom: 20,
   },
   entryContainer: {

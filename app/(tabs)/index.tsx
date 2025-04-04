@@ -28,6 +28,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import locale from "@/i18n";
 import { getTodayId } from "@/utils/functions/getTodayId";
+import { Flame, Snowflake } from "lucide-react-native";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -194,10 +195,26 @@ export default function HomeScreen() {
             colors={gradients.insight1}
             style={styles.insightCard}
           >
-            <Text style={[styles.insightNumber, { color: textColor }]}>
-              {streakCount}
-              {isTodayEntryWritten ? "🔥" : "🧊"}
-            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={[styles.insightNumber, { color: textColor }]}>
+                {streakCount}
+              </Text>
+                {isTodayEntryWritten ? (
+                <Flame
+                  strokeWidth={2}
+                  size={25}
+                  color={colorScheme === "dark" ? "#ff8c00" : "#ff4500"}
+                  style={{ marginLeft: 4 }}
+                />
+                ) : (
+                <Snowflake
+                  strokeWidth={1.8}
+                  size={25}
+                  color={colorScheme === "dark" ? "#6dd3cf" : "#4ac3ba"}
+                  style={{ marginLeft: 4 }}
+                />
+                )}
+            </View>
             <Text style={[styles.insightLabel, { color: textColor }]}>
               {t("insights.streak_entries")}
             </Text>
@@ -217,7 +234,7 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.section}>
-        <View style={[styles.sectionHeader, { marginBottom: 12 }]}>
+        <View style={[styles.sectionHeader]}>
           <Text
             style={[styles.sectionTitle, { color: textColor, marginBottom: 0 }]}
           >
@@ -338,7 +355,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   header: {
-    marginBottom: 16,
+    marginBottom: 24,
   },
   greeting: {
     fontSize: 28,
@@ -417,6 +434,10 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   insightNumber: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
     fontSize: 28,
     fontWeight: "bold",
   },
@@ -428,6 +449,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 12,
   },
   viewAll: {
     flexDirection: "row",
@@ -437,9 +459,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginRight: 4,
   },
-  recentList: {
-    marginTop: 12,
-  },
+  recentList: {},
   recentCard: {
     backgroundColor: "#ffffff",
     borderRadius: 5,
