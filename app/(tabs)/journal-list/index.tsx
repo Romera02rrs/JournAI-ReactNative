@@ -37,6 +37,7 @@ import {
 import { useTranslation } from "react-i18next";
 import locale from "@/i18n";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import WeekDay from "@/components/WeekDay";
 
 export default function DiaryEntriesScreen() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -238,6 +239,8 @@ export default function DiaryEntriesScreen() {
           )}
         </View>
       </View>
+
+      <WeekDay entries={allEntries}/>
 
       {loading ? (
         <View style={{ padding: 20 }}>

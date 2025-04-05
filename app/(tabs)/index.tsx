@@ -29,6 +29,8 @@ import i18n from "@/i18n";
 import locale from "@/i18n";
 import { getTodayId } from "@/utils/functions/getTodayId";
 import { Flame, Snowflake } from "lucide-react-native";
+import WeekDay from "@/components/WeekDay";
+import { getAllEntries } from "@/utils/functions/storage";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -42,6 +44,7 @@ export default function HomeScreen() {
 
   const [streakCount, setStreakCount] = useState<number>(0);
   const [totalNumberOfEntries, setTotalNumberOfEntries] = useState<number>(0);
+  const [allEntries, setAllEntries] = useState<any[]>([]);
   const [isTodayEntryWritten, setIsTodayEntryWritten] =
     useState<boolean>(false);
 
@@ -57,6 +60,9 @@ export default function HomeScreen() {
 
         const totalEntries = await getTotalNumberOfEntries();
         setTotalNumberOfEntries(totalEntries);
+
+        const entries = await getAllEntries();
+        setAllEntries(entries);
       };
       fetchData();
     }, [])
@@ -199,21 +205,21 @@ export default function HomeScreen() {
               <Text style={[styles.insightNumber, { color: textColor }]}>
                 {streakCount}
               </Text>
-                {isTodayEntryWritten ? (
+              {isTodayEntryWritten ? (
                 <Flame
                   strokeWidth={2}
                   size={25}
                   color={colorScheme === "dark" ? "#ff8c00" : "#ff4500"}
                   style={{ marginLeft: 4 }}
                 />
-                ) : (
+              ) : (
                 <Snowflake
                   strokeWidth={1.8}
                   size={25}
                   color={colorScheme === "dark" ? "#6dd3cf" : "#4ac3ba"}
                   style={{ marginLeft: 4 }}
                 />
-                )}
+              )}
             </View>
             <Text style={[styles.insightLabel, { color: textColor }]}>
               {t("insights.streak_entries")}
@@ -233,7 +239,7 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <View style={styles.section}>
+      <View style={{ marginBottom: 12 }}>
         <View style={[styles.sectionHeader]}>
           <Text
             style={[styles.sectionTitle, { color: textColor, marginBottom: 0 }]}
@@ -301,6 +307,9 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
+
+      <WeekDay entries={allEntries}></WeekDay>
+
       <View
         style={{ height: 3, backgroundColor: "#6e6e6e", marginVertical: 10 }}
       />
@@ -481,6 +490,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
+    marginBottom: 12,
   },
   emptyStateText: {
     fontSize: 16,

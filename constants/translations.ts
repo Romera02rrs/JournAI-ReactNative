@@ -37,7 +37,7 @@ export const resources = {
         title: "Your Daily Entries",
         caption: "Browse and search your past thoughts",
         week_entries: "This Week's Entries",
-        days_completed: "Days completed",
+        days_completed: "Days",
         search_placeholder: "Search entries...",
         today_entry: {
           title: "Add Today's Entry",
@@ -97,7 +97,7 @@ export const resources = {
         caption: "Explora y busca tus pensamientos pasados",
         week_entries: "Entradas de esta semana",
         search_placeholder: "Buscar entradas...",
-        days_completed: "Días completados",
+        days_completed: "Días",
         today_entry: {
           title: "Entrada de hoy",
           content: "Tómate un momento para capturar tus pensamientos, sentimientos y experiencias. Reflexiona sobre tu día y escribe sobre ello. ¿Qué te hizo feliz? ¿Qué desafíos enfrentaste?",
