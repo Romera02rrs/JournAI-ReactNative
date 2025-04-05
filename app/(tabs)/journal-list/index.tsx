@@ -37,7 +37,6 @@ import {
 import { useTranslation } from "react-i18next";
 import locale from "@/i18n";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import WeekDay from "@/components/WeekDay";
 
 export default function DiaryEntriesScreen() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -132,6 +131,22 @@ export default function DiaryEntriesScreen() {
       );
       setEntries(filteredEntries);
     }
+  };
+
+  const isRecentEntry = (entryDate: string | undefined) => {
+    if (!entryDate) return false;
+    const entryDay = new Date(entryDate).setHours(0, 0, 0, 0);
+    const todayDay = today.setHours(0, 0, 0, 0);
+    const yesterdayDay = new Date(today);
+    yesterdayDay.setDate(today.getDate() - 1);
+    const dayBeforeYesterday = new Date(today);
+    dayBeforeYesterday.setDate(today.getDate() - 2);
+
+    return (
+      entryDay === todayDay ||
+      entryDay === yesterdayDay.setHours(0, 0, 0, 0) ||
+      entryDay === dayBeforeYesterday.setHours(0, 0, 0, 0)
+    );
   };
 
   useFocusEffect(
@@ -240,14 +255,14 @@ export default function DiaryEntriesScreen() {
         </View>
       </View>
 
-      <WeekDay entries={allEntries}/>
-
       {loading ? (
         <View style={{ padding: 20 }}>
           <ActivityIndicator size="large" color={textColor} />
         </View>
       ) : (
         <ScrollView contentContainerStyle={[styles.listContent]}>
+
+          {/* Today's Entry */}
           <TouchableOpacity
             onPress={() => {
               saveScrollPosition(position);
@@ -330,7 +345,8 @@ export default function DiaryEntriesScreen() {
               </LinearGradient>
             </View>
           </TouchableOpacity>
-
+            
+          {/* Entry list */}
           {entries.map((item: Entry) => {
             if (item.id === getTodayId()) return null; // Skip today's entry
 
@@ -392,13 +408,18 @@ export default function DiaryEntriesScreen() {
                           Stars: {item.rating}/5
                         </Text>
                       </LinearGradient>
-                      <Feather name="lock" size={16} color={textColor} />
+                      <Feather
+                        name={isRecentEntry(item.date) ? "chevron-right" : "lock"}
+                        size={16}
+                        color={textColor}
+                      />
                     </View>
                   </LinearGradient>
                 </View>
               </TouchableOpacity>
             );
           })}
+          
         </ScrollView>
       )}
     </ParallaxScrollView>

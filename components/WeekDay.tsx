@@ -62,7 +62,7 @@ export default function WeekDay({ entries }: { entries: Entry[] }) {
   };
 
   return (
-    <View style={[ styles.entryShadowContainer, { shadowColor: contrast }]}>
+    <View style={[styles.entryShadowContainer, { shadowColor: contrast }]}>
       <LinearGradient
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -102,7 +102,7 @@ export default function WeekDay({ entries }: { entries: Entry[] }) {
                     styles.linearGradientContainer,
                     {
                       borderWidth: isToday ? 1.2 : 0,
-                      borderColor: isToday ? "#0ecf00d3" : "transparent",
+                      borderColor: isToday ? "#4caf50" : "transparent",
                     },
                   ]}
                 >
@@ -136,7 +136,7 @@ export default function WeekDay({ entries }: { entries: Entry[] }) {
                   styles.dayCellInactive,
                   {
                     borderWidth: isToday ? 1.2 : 0,
-                    borderColor: isToday ? "#e90027e6" : "transparent",
+                    borderColor: isToday ? "#f44336" : "transparent",
                   },
                 ]}
               >
@@ -212,17 +212,17 @@ const styles = StyleSheet.create({
 
   // Días de la semana (celdas)
   dayCell: {
-    width: "13%",
+    width: "11%",
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
   },
-  dayCellActive: {
-    backgroundColor: "rgba(0,122,255,0.1)",
-    borderColor: "rgba(0,122,255,0.2)",
+  dayCellActive: {},
+  dayCellInactive: {
+    padding: 6,
+    paddingBottom: 10.5,
   },
-  dayCellInactive: {},
   dayLabel: {
     fontSize: 14,
     fontWeight: "500",
@@ -236,13 +236,12 @@ const styles = StyleSheet.create({
   },
   shadowContainer: {
     borderRadius: 5,
-    margin: 6,
     shadowOpacity: 0.1,
     shadowRadius: 5,
     shadowOffset: { width: 1, height: 2 },
   },
   dayCellGradient: {
-    width: "13%",
+    width: "11%",
     borderRadius: 5,
   },
   linearGradientContainer: {

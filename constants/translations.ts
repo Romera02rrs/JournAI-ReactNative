@@ -45,7 +45,19 @@ export const resources = {
           today_no_title: "There is no title for your today's entry",
           today_no_content: "There is no content in your today's entry, write something about your day, take a moment to reflect on your thoughts, feelings, and experiences.",
           today_no_rating: "No rating",
-        }
+        },
+        yesterday_entry: {
+          title: "Add Yesterday's Entry",
+          content: "Take a moment to capture your thoughts, feelings, and experiences. Reflect on your day and write about it. What made you happy? What challenges did you face?",
+          yesterday_no_title: "There is no title for your yesterday's entry",
+          yesterday_no_content: "There is no content in your yesterday's entry, write something about your day, take a moment to reflect on your thoughts, feelings, and experiences.",
+        },
+        entry_from_two_days_ago: {
+          title: "Add Entry from Two Days Ago",
+          content: "Take a moment to capture your thoughts, feelings, and experiences. Reflect on your day and write about it. What made you happy? What challenges did you face?",
+          two_days_ago_no_title: "There is no title for your entry from two days ago",
+          two_days_ago_no_content: "There is no content in your entry from two days ago, write something about your day, take a moment to reflect on your thoughts, feelings, and experiences.",
+        },
       },
       week_day: {
         monday: "M",
@@ -99,12 +111,24 @@ export const resources = {
         search_placeholder: "Buscar entradas...",
         days_completed: "Días",
         today_entry: {
-          title: "Entrada de hoy",
+          title: "Escribe la entrada de hoy",
           content: "Tómate un momento para capturar tus pensamientos, sentimientos y experiencias. Reflexiona sobre tu día y escribe sobre ello. ¿Qué te hizo feliz? ¿Qué desafíos enfrentaste?",
           today_no_title: "No hay título para tu entrada de hoy",
           today_no_content: "¡No hay contenido en tu entrada de hoy! escribe algo sobre tu día, tómate un momento para reflexionar sobre tus pensamientos, sentimientos y experiencias.",
           today_no_rating: "Sin puntuación",
-        }
+        },
+        yesterday_entry: {
+          title: "Escribe la entrada de ayer",
+          content: "Tómate un momento para capturar tus pensamientos, sentimientos y experiencias. Reflexiona sobre tu día y escribe sobre ello. ¿Qué te hizo feliz? ¿Qué desafíos enfrentaste?",
+          yesterday_no_title: "No hay título para tu entrada de ayer",
+          yesterday_no_content: "¡No hay contenido en tu entrada de ayer! escribe algo sobre tu día, tómate un momento para reflexionar sobre tus pensamientos, sentimientos y experiencias.",
+        },
+        entry_from_two_days_ago: {
+          title: "Escribe la entrada de antes de ayer",
+          content: "Tómate un momento para capturar tus pensamientos, sentimientos y experiencias. Reflexiona sobre tu día y escribe sobre ello. ¿Qué te hizo feliz? ¿Qué desafíos enfrentaste?",
+          two_days_ago_no_title: "No hay título para tu entrada de antes de ayer",
+          two_days_ago_no_content: "¡No hay contenido en tu entrada de antes de ayer! escribe algo sobre tu día, tómate un momento para reflexionar sobre tus pensamientos, sentimientos y experiencias.",
+        },
       },
       week_day: {
         monday: "L",
