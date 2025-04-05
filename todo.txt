@@ -11,3 +11,6 @@
 // Arreglar titulo de journal-edit, se ha subido
 
 // Info: Solo puedes editar entradas de hasta 3 días atrás. Después de eso, ya no se pueden modificar ni crear. ¡Así que asegúrate de escribir lo que sientes en el momento!
+
+// Añadir sobra al rating de las entradas
+// Cuando edites una entrada. instantáneamente se inicia el loading
