@@ -28,15 +28,11 @@ import {
   getTodayEntry,
 } from "@/utils/functions/storage";
 import { getTodayId } from "@/utils/functions/getTodayId";
-import {
-  Entry,
-  GradientColors,
-  RatingColorsGradient,
-  ScrollEvent,
-} from "@/utils/types";
+import { Entry, GradientColors, ScrollEvent } from "@/utils/types";
 import { useTranslation } from "react-i18next";
 import locale from "@/i18n";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { ratingColorsGradient } from "@/constants/Colors";
 
 export default function DiaryEntriesScreen() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -94,29 +90,6 @@ export default function DiaryEntriesScreen() {
       colorScheme === "dark" ? ["#232527", "#1F1F22"] : ["#efefef", "#fcfcfc"],
   };
 
-  const ratingColorsGradient: RatingColorsGradient = {
-    5: {
-      backgroundColor: ["#ECFDF5", "#D6F5E9"],
-      color: "#2F5D50",
-    },
-    4: {
-      backgroundColor: ["#E6F4FA", "#D3EDF7"],
-      color: "#355A7A",
-    },
-    3: {
-      backgroundColor: ["#FAF9E6", "#F4F1C8"],
-      color: "#7A6405",
-    },
-    2: {
-      backgroundColor: ["#FFF3E6", "#FFE3CC"],
-      color: "#A05318",
-    },
-    1: {
-      backgroundColor: ["#FFE4E6", "#FDCAD0"],
-      color: "#B3364A",
-    },
-  };
-
   const handleScrollEvent = (event: ScrollEvent) => {
     position = event.nativeEvent.contentOffset.y;
   };
@@ -154,39 +127,29 @@ export default function DiaryEntriesScreen() {
       let isActive = true;
 
       const fetchEntries = async () => {
-        const dirty = await areEntriesDirty();
-        if (!dirty && hasLoadedEntriesOnce.current) {
-          return;
-        }
+        if (!(await areEntriesDirty()) && hasLoadedEntriesOnce.current) return;
 
         setLoading(true);
         const storedEntries = await getAllEntries();
         if (!isActive) return;
 
-        const sorted = storedEntries.sort((a: Entry, b: Entry) => {
-          return new Date(b.id).getTime() - new Date(a.id).getTime();
-        });
-        setAllEntries(sorted);
-        setEntries(sorted);
+        const sortedEntries = storedEntries.sort(
+          (a: Entry, b: Entry) =>
+            new Date(b.id).getTime() - new Date(a.id).getTime()
+        );
+        setAllEntries(sortedEntries);
+        setEntries(sortedEntries);
 
         const isTodayWritten = await checkIsTodayWritten();
         setIsTodayEntryWritten(isTodayWritten);
-
-        if (isTodayWritten) {
-          const entry = await getTodayEntry();
-          setTodayEntry(entry);
-        } else {
-          setTodayEntry(null);
-        }
+        setTodayEntry(isTodayWritten ? await getTodayEntry() : null);
 
         hasLoadedEntriesOnce.current = true;
         setLoading(false);
         await clearEntriesDirtyFlag();
 
-        requestAnimationFrame(async () => {
-          const position = await getScrollPosition();
-          parallaxRef.current?.scrollTo(position, true);
-        });
+        const position = await getScrollPosition();
+        parallaxRef.current?.scrollTo(position, true);
       };
 
       fetchEntries();
@@ -197,9 +160,6 @@ export default function DiaryEntriesScreen() {
     }, [])
   );
 
-  console.log("Is today entry written:", isTodayEntryWritten);
-  console.log("Today's entry:", todayEntry);
-
   return (
     <ParallaxScrollView
       ref={parallaxRef}
@@ -207,6 +167,7 @@ export default function DiaryEntriesScreen() {
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={<Image source={coverImage} style={styles.coverImage} />}
     >
+      {/* Header */}
       <View style={[styles.section, { marginBottom: 21 }]}>
         <Text style={[styles.greeting, { color: textColor }]}>
           {t("journal_list.title")}
@@ -214,6 +175,7 @@ export default function DiaryEntriesScreen() {
         <Text style={styles.date}>{t("journal_list.caption")}</Text>
       </View>
 
+      {/* Search Bar */}
       <View style={[styles.dateSearchContainer, styles.section]}>
         <View
           style={[
@@ -259,6 +221,7 @@ export default function DiaryEntriesScreen() {
           <ActivityIndicator size="large" color={textColor} />
         </View>
       ) : (
+        // Entries List Container
         <ScrollView contentContainerStyle={[styles.listContent]}>
           {/* Today's Entry */}
           <TouchableOpacity

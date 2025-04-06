@@ -38,7 +38,6 @@ export default function NotesScreen() {
   const id = useMemo(() => {
     return routeId || getTodayId();
   }, [routeId]);
-  console.log("ID:", id);
 
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
@@ -94,20 +93,18 @@ export default function NotesScreen() {
     }, [defaultImage, id])
   );
 
-  const saveChanges = useMemo(() => {
-    return debounce(async (updatedField: Partial<Entry>) => {
-      if (!id) return;
+  const saveChanges = async (updatedField: Partial<Entry>) => {
+    if (!id) return;
 
-      setIsSaving(true); // Inicia el indicador de guardado
+    setIsSaving(true); // Inicia el indicador de guardado
 
-      await updateEntry({
-        id: Array.isArray(id) ? id[0] : id,
-        ...updatedField,
-      });
+    await updateEntry({
+      id: Array.isArray(id) ? id[0] : id,
+      ...updatedField,
+    });
 
-      setIsSaving(false); // Detén el indicador de guardado
-    }, 500);
-  }, [id]);
+    setIsSaving(false); // Detén el indicador de guardado
+  };
 
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle);

@@ -1,16 +1,10 @@
 // Opción de frase: know yourself, grow Every Day.
-// Precargar imagen del journal-list
 // valorar el hacer efectos animados al cambiar de página
 // la imagen de la portada del journal-list pesa mucho
 // Una pantalla de bloqueo
 
-// Puedes escribir la entrada de diario de 3 días hacia atrás desde el día actual pero no hacia adelante y pasados los 3 días no puedes escribir
   // Yesterday's entry
   // Entry from 2 days ago
 // Funcionalidad para cambiar el fondo de pantalla en ajustes y el lenguaje 
-// Arreglar titulo de journal-edit, se ha subido
 
 // Info: Solo puedes editar entradas de hasta 3 días atrás. Después de eso, ya no se pueden modificar ni crear. ¡Así que asegúrate de escribir lo que sientes en el momento!
-
-// Añadir sobra al rating de las entradas
-// Cuando edites una entrada. instantáneamente se inicia el loading
