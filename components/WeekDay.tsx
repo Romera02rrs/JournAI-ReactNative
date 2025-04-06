@@ -134,10 +134,8 @@ export default function WeekDay({ entries }: { entries: Entry[] }) {
                 style={[
                   styles.dayCell,
                   styles.dayCellInactive,
-                  {
-                    borderWidth: isToday ? 1.2 : 0,
-                    borderColor: isToday ? "#f44336" : "transparent",
-                  },
+                  isToday && styles.todayDayCellInactive,
+                  
                 ]}
               >
                 <Text
@@ -221,7 +219,12 @@ const styles = StyleSheet.create({
   dayCellActive: {},
   dayCellInactive: {
     padding: 6,
-    paddingBottom: 10.5,
+    paddingBottom: 18.8,
+  },
+  todayDayCellInactive: {
+    backgroundColor: "#f4433614",
+    borderWidth: 1.2,
+    borderColor: "#f4433661",
   },
   dayLabel: {
     fontSize: 14,

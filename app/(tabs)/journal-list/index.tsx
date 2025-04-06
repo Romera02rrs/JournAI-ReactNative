@@ -207,7 +207,6 @@ export default function DiaryEntriesScreen() {
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={<Image source={coverImage} style={styles.coverImage} />}
     >
-      
       <View style={[styles.section, { marginBottom: 21 }]}>
         <Text style={[styles.greeting, { color: textColor }]}>
           {t("journal_list.title")}
@@ -261,7 +260,6 @@ export default function DiaryEntriesScreen() {
         </View>
       ) : (
         <ScrollView contentContainerStyle={[styles.listContent]}>
-
           {/* Today's Entry */}
           <TouchableOpacity
             onPress={() => {
@@ -313,28 +311,30 @@ export default function DiaryEntriesScreen() {
                   {isTodayEntryWritten &&
                   todayEntry &&
                   (todayEntry.rating ?? 0) > 0 ? (
-                    <LinearGradient
-                      colors={
-                        ratingColorsGradient[todayEntry.rating ?? 1]
-                          .backgroundColor
-                      }
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={styles.starsGradientContainer}
-                    >
-                      <Text
-                        style={[
-                          styles.entryStars,
-                          {
-                            color:
-                              ratingColorsGradient[todayEntry.rating ?? 1]
-                                .color,
-                          },
-                        ]}
+                    <View style={styles.shadowContainer}>
+                      <LinearGradient
+                        colors={
+                          ratingColorsGradient[todayEntry.rating ?? 1]
+                            .backgroundColor
+                        }
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        style={styles.starsGradientContainer}
                       >
-                        Stars: {todayEntry.rating}/5
-                      </Text>
-                    </LinearGradient>
+                        <Text
+                          style={[
+                            styles.entryStars,
+                            {
+                              color:
+                                ratingColorsGradient[todayEntry.rating ?? 1]
+                                  .color,
+                            },
+                          ]}
+                        >
+                          Stars: {todayEntry.rating}/5
+                        </Text>
+                      </LinearGradient>
+                    </View>
                   ) : (
                     <Text style={styles.TodayNoRating}>
                       {t("journal_list.today_entry.today_no_rating")}
@@ -345,7 +345,7 @@ export default function DiaryEntriesScreen() {
               </LinearGradient>
             </View>
           </TouchableOpacity>
-            
+
           {/* Entry list */}
           {entries.map((item: Entry) => {
             if (item.id === getTodayId()) return null; // Skip today's entry
@@ -393,23 +393,27 @@ export default function DiaryEntriesScreen() {
                       {item.content}
                     </Text>
                     <View style={[styles.entryFooter]}>
-                      <LinearGradient
-                        colors={ratingStyle.backgroundColor}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}
-                        style={styles.starsGradientContainer}
-                      >
-                        <Text
-                          style={[
-                            styles.entryStars,
-                            { color: ratingStyle.color },
-                          ]}
+                      <View style={styles.shadowContainer}>
+                        <LinearGradient
+                          colors={ratingStyle.backgroundColor}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 1 }}
+                          style={styles.starsGradientContainer}
                         >
-                          Stars: {item.rating}/5
-                        </Text>
-                      </LinearGradient>
+                          <Text
+                            style={[
+                              styles.entryStars,
+                              { color: ratingStyle.color },
+                            ]}
+                          >
+                            Stars: {item.rating}/5
+                          </Text>
+                        </LinearGradient>
+                      </View>
                       <Feather
-                        name={isRecentEntry(item.date) ? "chevron-right" : "lock"}
+                        name={
+                          isRecentEntry(item.date) ? "chevron-right" : "lock"
+                        }
                         size={16}
                         color={textColor}
                       />
@@ -419,7 +423,6 @@ export default function DiaryEntriesScreen() {
               </TouchableOpacity>
             );
           })}
-          
         </ScrollView>
       )}
     </ParallaxScrollView>
@@ -523,6 +526,13 @@ const styles = StyleSheet.create({
   },
   todayEntry: {
     borderWidth: 0,
+  },
+  shadowContainer: {
+    borderRadius: 5,
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    shadowOffset: { width: 1, height: 2 },
+    shadowColor: "#000",
   },
   TodayNoRating: {
     fontSize: 12,

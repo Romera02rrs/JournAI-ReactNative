@@ -14,6 +14,10 @@ export const resources = {
         test: "Test",
         analysis: "Analysis",
       },
+      journal_editor: {
+        title_placeholder: "Title",
+        content_placeholder: "Note",
+      },
       entry: {
         entry: "Entry",
         entries: "Entries",
@@ -84,6 +88,10 @@ export const resources = {
         settings: "Configuración",
         test: "Prueba",
         analysis: "Análisis",
+      },
+      journal_editor: {
+        title_placeholder: "Título",
+        content_placeholder: "Nota",
       },
       entry: {
         entry: "Entrada",

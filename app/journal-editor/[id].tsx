@@ -26,8 +26,10 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { getTodayId } from "@/utils/functions/getTodayId";
 import { map } from "lodash";
+import { useTranslation } from "react-i18next";
 
 export default function NotesScreen() {
+  const { t } = useTranslation();
   const defaultImage = Image.resolveAssetSource(
     require("@/assets/images/entry_default_cover_min.webp")
   ).uri;
@@ -36,12 +38,16 @@ export default function NotesScreen() {
   const id = useMemo(() => {
     return routeId || getTodayId();
   }, [routeId]);
+  console.log("ID:", id);
+
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
-  const [date] = useState("");
+  const [date, setDate] = useState(getTodayId());
   const [image, setImage] = useState(defaultImage);
   const [rating, setRating] = useState<number>(0);
   const ratings: Rating[] = [1, 2, 3, 4, 5];
+  const [showMoodOptions, setShowMoodOptions] = useState(false);
+  const [mood, setMood] = useState<string>("");
 
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -76,8 +82,10 @@ export default function NotesScreen() {
         if (entry) {
           setText(entry.content || "");
           setTitle(entry.title || "");
+          setDate(entry.date || "");
           setRating(entry.rating || 0);
           setImage(entry.imageUri || defaultImage);
+          setMood(entry.mood || "");
         }
         setLoading(false);
       };
@@ -141,6 +149,12 @@ export default function NotesScreen() {
     await updateEntry(entry);
   };
 
+  const handleMoodChange = (newMood: string) => {
+    setMood(newMood);
+    saveChanges({ mood: newMood });
+    setShowMoodOptions(false);
+  };
+
   return (
     <PanGestureHandler
       activeOffsetX={10}
@@ -166,18 +180,37 @@ export default function NotesScreen() {
                 <ActivityIndicator size="small" color={textColor} />
               </View>
             )}
-            <View style={styles.header}>
-              <TextInput
-                style={[styles.titleInput, { color: textColor }]}
-                placeholder="Title"
-                placeholderTextColor="#999"
-                maxLength={100}
-                value={title}
-                onChangeText={handleTitleChange}
-              />
-            </View>
+            
             <View style={styles.subheading}>
               <Text style={styles.dateText}>{date}</Text>
+
+              {/* Botón Mood sobrepuesto sin alterar el layout */}
+              <View style={styles.moodButtonContainer}>
+                <TouchableOpacity
+                  style={styles.moodButton}
+                  onPress={() => setShowMoodOptions(!showMoodOptions)}
+                >
+                  <Text style={[styles.moodButtonText, { color: textColor }]}>
+                    {mood ? mood : "Mood"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {showMoodOptions && (
+                <View style={styles.moodOptionsOverlay}>
+                  {["😀", "😐", "😢", "😡", "🤔", "😴", "😍", "😎"].map((option, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.moodOptionButton}
+                      onPress={() => {
+                        handleMoodChange(option);
+                      }}
+                    >
+                      <Text style={styles.moodOptionText}>{option}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+
               <View style={styles.ratingContainer}>
                 {map(ratings, (i, _index) => (
                   <TouchableOpacity
@@ -193,7 +226,18 @@ export default function NotesScreen() {
                 ))}
               </View>
             </View>
+
             <View style={styles.separator} />
+            <View style={styles.header}>
+              <TextInput
+                style={[styles.titleInput, { color: textColor }]}
+                placeholder={t("journal_editor.title_placeholder")}
+                placeholderTextColor="#999"
+                maxLength={100}
+                value={title}
+                onChangeText={handleTitleChange}
+              />
+            </View>
             <ScrollView
               ref={scrollViewRef}
               style={styles.scrollView}
@@ -211,7 +255,7 @@ export default function NotesScreen() {
                 multiline
                 value={text}
                 onChangeText={handleTextChange}
-                placeholder="Note"
+                placeholder={t("journal_editor.content_placeholder")}
                 placeholderTextColor="#999"
                 onContentSizeChange={handleContentSizeChange}
                 autoCapitalize="sentences"
@@ -245,20 +289,24 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 16,
-    paddingTop: 16,
+    marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
   },
   subheading: {
+    display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 16,
+    marginTop: 16,
+    position: "relative", // importante para posicionar el overlay
   },
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: 15,
+    marginBottom: 10,
   },
   titleInput: {
     fontSize: 28,
@@ -266,16 +314,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dateText: {
-    marginTop: 16,
-    marginBottom: 16,
     fontSize: 14,
     color: "#999",
+    marginBottom: 10,
   },
   separator: {
     height: 1,
     backgroundColor: "#CCC",
     marginHorizontal: 16,
-    marginBottom: 16,
+    marginTop: 6.5,
+    marginBottom: 13,
   },
   scrollView: {
     flex: 1,
@@ -286,5 +334,39 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 100,
     minHeight: "100%",
+  },
+  moodButtonContainer: {
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  moodButton: {
+    backgroundColor: "#eee",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 5,
+  },
+  moodButtonText: {
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  moodOptionsOverlay: {
+    position: "absolute",
+    top: 60, // ajusta según altura del header/subheading
+    alignSelf: "center",
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    padding: 8,
+    borderRadius: 5,
+    zIndex: 20,
+    elevation: 5,
+  },
+  moodOptionButton: {
+    padding: 8,
+    marginHorizontal: 4,
+    backgroundColor: "#f2f2f2",
+    borderRadius: 5,
+  },
+  moodOptionText: {
+    fontSize: 22,
   },
 });

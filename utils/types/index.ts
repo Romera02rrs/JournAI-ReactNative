@@ -7,6 +7,7 @@ export interface Entry {
   content?: string;
   imageUri?: string;
   rating?: Rating;
+  mood?: string;
 }
 
 export interface ScrollEvent {
