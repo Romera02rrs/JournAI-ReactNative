@@ -62,6 +62,11 @@ export const resources = {
           two_days_ago_no_title: "There is no title for your entry from two days ago",
           two_days_ago_no_content: "There is no content in your entry from two days ago, write something about your day, take a moment to reflect on your thoughts, feelings, and experiences.",
         },
+        entries: {
+          no_title: "There is no title",
+          no_content: "There is no content",
+          no_rating: "No rating",
+        }
       },
       week_day: {
         monday: "M",
@@ -137,6 +142,11 @@ export const resources = {
           two_days_ago_no_title: "No hay título para tu entrada de antes de ayer",
           two_days_ago_no_content: "¡No hay contenido en tu entrada de antes de ayer! escribe algo sobre tu día, tómate un momento para reflexionar sobre tus pensamientos, sentimientos y experiencias.",
         },
+        entries: {
+          no_title: "No hay título",
+          no_content: "No hay contenido",
+          no_rating: "Sin puntuación",
+        }
       },
       week_day: {
         monday: "L",

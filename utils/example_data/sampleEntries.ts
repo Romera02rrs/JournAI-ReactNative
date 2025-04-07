@@ -1,26 +1,13 @@
 import { Entry } from "@/utils/types";
 
 export const sampleEntries: Entry[] = [
-  // {
-  //   id: "2025-04-06",
-  //   rating: 1,
-  //   date: "2025-04-06",
-  //   title: "Domingo",
-  //   content: `Domingo`,
-  // },
   {
-    id: "2025-04-05",
-    rating: 1,
-    date: "2025-04-05",
-    title: "Sábado",
-    content: `Sábado`,
+    id: "2025-04-06",
+    date: "2025-04-06",
   },
   {
     id: "2025-04-04",
-    rating: 1,
     date: "2025-04-04",
-    title: "Viernes",
-    content: `Viernes`,
   },
   {
     id: "2025-04-03",

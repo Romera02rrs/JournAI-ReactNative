@@ -8,3 +8,6 @@
 // Funcionalidad para cambiar el fondo de pantalla en ajustes y el lenguaje 
 
 // Info: Solo puedes editar entradas de hasta 3 días atrás. Después de eso, ya no se pueden modificar ni crear. ¡Así que asegúrate de escribir lo que sientes en el momento!
+
+// Arreglar mood desplegable
+// Una cuenta atrás en la entrada para saber cuánto tiempo te queda para que se bloqueé

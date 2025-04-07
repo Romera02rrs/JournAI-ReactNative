@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import { Entry } from "@/utils/types";
-import { getTodayId } from "@/utils/functions/getTodayId";
+import { getToday } from "@/utils/functions/dateUtils";
 
 const SCROLL_POSITION_KEY = "diary_scroll_position";
 const ENTRIES_DIRTY_KEY = "entries_dirty";
@@ -275,7 +275,7 @@ export const getStreakCount = async (): Promise<number> => {
  */
 export const checkIsTodayWritten = async (): Promise<boolean> => {
   const allEntries = await getAllEntries();
-  const today = getTodayId(); // Fecha actual en formato YYYY-MM-DD
+  const today = getToday(); // Fecha actual en formato YYYY-MM-DD
 
   return allEntries.some(
     (entry: Entry) =>
@@ -290,7 +290,7 @@ export const checkIsTodayWritten = async (): Promise<boolean> => {
  */
 export const getTodayEntry = async (): Promise<Entry | null> => {
   const allEntries = await getAllEntries();
-  const today = getTodayId(); // Fecha actual en formato YYYY-MM-DD
+  const today = getToday(); // Fecha actual en formato YYYY-MM-DD
 
   // Buscar la entrada del día actual
   const todayEntry = allEntries.find((entry: Entry) => entry.id === today);

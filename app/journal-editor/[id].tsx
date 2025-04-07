@@ -15,7 +15,6 @@ import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
-import debounce from "lodash/debounce";
 import {
   getEntryById,
   updateEntry,
@@ -24,7 +23,7 @@ import {
 import { Entry, PanHandlerStateChangeEvent, Rating } from "@/utils/types";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { getTodayId } from "@/utils/functions/getTodayId";
+import { getToday } from "@/utils/functions/dateUtils";
 import { map } from "lodash";
 import { useTranslation } from "react-i18next";
 
@@ -36,12 +35,12 @@ export default function NotesScreen() {
 
   const { id: routeId } = useLocalSearchParams();
   const id = useMemo(() => {
-    return routeId || getTodayId();
+    return routeId || getToday();
   }, [routeId]);
 
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState(getTodayId());
+  const [date, setDate] = useState(getToday());
   const [image, setImage] = useState(defaultImage);
   const [rating, setRating] = useState<number>(0);
   const ratings: Rating[] = [1, 2, 3, 4, 5];
@@ -56,6 +55,8 @@ export default function NotesScreen() {
 
   const textColor = useThemeColor({}, "text");
   const backgroundColor = useThemeColor({}, "background");
+  const soft = useThemeColor({}, "soft");
+  const contrast = useThemeColor({}, "contrast");
 
   const handleContentSizeChange = useCallback(() => {
     scrollViewRef.current?.scrollToEnd({ animated: true });
@@ -181,10 +182,10 @@ export default function NotesScreen() {
             <View style={styles.subheading}>
               <Text style={styles.dateText}>{date}</Text>
 
-              {/* Botón Mood sobrepuesto sin alterar el layout */}
-              <View style={styles.moodButtonContainer}>
+              {/* MOOD Button */}
+              <View style={[styles.moodButtonContainer, { shadowColor: contrast }]}>
                 <TouchableOpacity
-                  style={styles.moodButton}
+                  style={[styles.moodButton, { backgroundColor: soft }]}
                   onPress={() => setShowMoodOptions(!showMoodOptions)}
                 >
                   <Text style={[styles.moodButtonText, { color: textColor }]}>
@@ -335,9 +336,13 @@ const styles = StyleSheet.create({
   moodButtonContainer: {
     justifyContent: "center",
     marginBottom: 10,
+
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
   },
   moodButton: {
-    backgroundColor: "#eee",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 5,
@@ -348,7 +353,7 @@ const styles = StyleSheet.create({
   },
   moodOptionsOverlay: {
     position: "absolute",
-    top: 60, // ajusta según altura del header/subheading
+    top: 60,
     alignSelf: "center",
     flexDirection: "row",
     backgroundColor: "#fff",

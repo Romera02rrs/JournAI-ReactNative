@@ -27,7 +27,7 @@ import { useRouter, useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import locale from "@/i18n";
-import { getTodayId } from "@/utils/functions/getTodayId";
+import { getToday } from "@/utils/functions/dateUtils";
 import { Flame, Snowflake } from "lucide-react-native";
 import WeekDay from "@/components/WeekDay";
 import { getAllEntries } from "@/utils/functions/storage";
@@ -179,7 +179,7 @@ export default function HomeScreen() {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            router.push(`/journal-editor/${getTodayId()}`);
+            router.push(`/journal-editor/${getToday()}`);
           }}
         >
           <Feather
@@ -265,7 +265,7 @@ export default function HomeScreen() {
             </Text>
             <TouchableOpacity
               style={[styles.button, { backgroundColor: entryBackgroundColor }]}
-              onPress={() => router.push(`/journal-editor/${getTodayId()}`)}
+              onPress={() => router.push(`/journal-editor/${getToday()}`)}
             >
               <Feather
                 name="plus"

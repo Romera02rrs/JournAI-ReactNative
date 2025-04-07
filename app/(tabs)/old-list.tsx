@@ -26,7 +26,7 @@ import {
   clearEntriesDirtyFlag,
 } from "@/utils/functions/storage";
 import { Entry, ScrollEvent } from "@/utils/types";
-import { getTodayId } from "@/utils/functions/getTodayId";
+import { getToday } from "@/utils/functions/dateUtils";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function OldEntryList() {
@@ -153,7 +153,7 @@ export default function OldEntryList() {
           <TouchableOpacity
             onPress={() => {
               saveScrollPosition(position);
-              router.push(`/journal-editor/${getTodayId()}`);
+              router.push(`/journal-editor/${getToday()}`);
             }}
           >
             <LinearGradient
