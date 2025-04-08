@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useMemo } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -30,7 +30,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { ratingColorsGradient } from "@/constants/Colors";
 import TodayEntry from "@/components/TodayEntry";
 import SearchBar from "@/components/SearchBar";
-import { getToday, isEntryExpired } from "@/utils/functions/dateUtils";
+import { dateFormatOptions, getToday, isEntryExpired } from "@/utils/functions/dateUtils";
+import NonExpiredEntries from "@/components/EditableEntries";
 
 export default function DiaryEntriesScreen() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -47,13 +48,6 @@ export default function DiaryEntriesScreen() {
   const colorScheme = useColorScheme();
 
   let position = 0;
-
-  const options: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
 
   const coverImage =
     colorScheme === "dark"
@@ -130,7 +124,12 @@ export default function DiaryEntriesScreen() {
         <ScrollView contentContainerStyle={[styles.listContent]}>
           {/* Today's Entry */}
 
-          <TodayEntry />
+          <TodayEntry position={position} />
+          <NonExpiredEntries
+            allEntries={allEntries}
+            position={position}
+            gradients={gradients}
+          />
 
           {/* Entry list */}
           {/* Renderizar la lista de entradas expiradas.
@@ -157,7 +156,7 @@ export default function DiaryEntriesScreen() {
                 key={item.id}
                 onPress={() => {
                   saveScrollPosition(position);
-                  router.push(`/journal-editor/${item.id}`);
+                  router.push(`/journal-editor/${item.id}/?edit=false`);
                 }}
               >
                 <View
@@ -179,7 +178,7 @@ export default function DiaryEntriesScreen() {
                       {item.date
                         ? new Date(item.date).toLocaleDateString(
                             locale.language,
-                            options
+                            dateFormatOptions
                           )
                         : t("journal_list.no_date")}
                     </Text>

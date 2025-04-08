@@ -27,7 +27,7 @@ import { useRouter, useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import locale from "@/i18n";
-import { getToday } from "@/utils/functions/dateUtils";
+import { dateFormatOptions, getToday } from "@/utils/functions/dateUtils";
 import { Flame, Snowflake } from "lucide-react-native";
 import WeekDay from "@/components/WeekDay";
 import { getAllEntries } from "@/utils/functions/storage";
@@ -72,14 +72,7 @@ export default function HomeScreen() {
     { date: string; title: string; id: string }[]
   >([]);
 
-  const options: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-
-  const formattedDate = today.toLocaleDateString(locale.language, options);
+  const formattedDate = today.toLocaleDateString(locale.language, dateFormatOptions);
 
   const gradients: GradientColors = {
     entryCard:
@@ -294,7 +287,7 @@ export default function HomeScreen() {
                 <Text style={styles.recentDate}>
                   {new Date(entry.date).toLocaleDateString(
                     i18n.language,
-                    options
+                    dateFormatOptions
                   )}
                 </Text>
                 <Text style={[styles.recentTitle, { color: textColor }]}>

@@ -11,3 +11,5 @@
 
 // Arreglar mood desplegable
 // Una cuenta atrás en la entrada para saber cuánto tiempo te queda para que se bloqueé
+
+// ?edit=false para que no se pueda editar la entrada expirada

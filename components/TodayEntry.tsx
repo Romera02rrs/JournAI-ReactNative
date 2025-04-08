@@ -8,7 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ratingColorsGradient } from "@/constants/Colors";
-import { getToday } from "@/utils/functions/dateUtils";
+import { dateFormatOptions, getToday } from "@/utils/functions/dateUtils";
 import { Entry, GradientColors } from "@/utils/types";
 import {
   saveScrollPosition,
@@ -17,7 +17,7 @@ import {
 } from "@/utils/functions/storage";
 import { useFocusEffect } from "@react-navigation/native";
 
-const TodayEntry = () => {
+const TodayEntry = ({ position }: { position: number }) => {
   const [isTodayEntryWritten, setIsTodayEntryWritten] = useState(false);
   const [todayEntry, setTodayEntry] = useState<Entry | null>(null);
   const { t } = useTranslation();
@@ -28,15 +28,6 @@ const TodayEntry = () => {
   const softContrast = useThemeColor({}, "softContrast");
 
   const colorScheme = useColorScheme();
-
-  let position = 0;
-
-  const options: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
 
   const gradients: GradientColors = {
     purlple:
@@ -80,7 +71,7 @@ const TodayEntry = () => {
           ]}
         >
           <Text style={[styles.entryDate, { fontSize: 13.5 }]}>
-            {today.toLocaleDateString(locale.language, options)}
+            {today.toLocaleDateString(locale.language, dateFormatOptions)}
           </Text>
           <Text style={[styles.entryTitle, { color: textColor, fontSize: 21 }]}>
             {isTodayEntryWritten

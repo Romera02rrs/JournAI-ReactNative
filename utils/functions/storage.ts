@@ -250,10 +250,10 @@ export const getStreakCount = async (): Promise<number> => {
       (currentDate.getTime() - entryDate.getTime()) / MS_IN_DAY
     );
 
-    console.log("Procesando entrada:", entry.id);
-    console.log("  entryDate:", entryDate.toLocaleString());
-    console.log("  currentDate:", currentDate.toLocaleString());
-    console.log("  diffInDays:", diffInDays);
+    // console.log("Procesando entrada:", entry.id);
+    // console.log("  entryDate:", entryDate.toLocaleString());
+    // console.log("  currentDate:", currentDate.toLocaleString());
+    // console.log("  diffInDays:", diffInDays);
 
     if (diffInDays === 0) {
       streakCount++;
